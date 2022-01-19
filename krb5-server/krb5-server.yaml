@@ -47,23 +47,7 @@ spec:
            env:
              - name: KDB5_MASTERKEY
                value: "PLEASE_CHANGE_ME"
-           command: ["bash", "-c"]
-           args:
-             - |
-               set -e
-               if [ -z "${KDB5_MASTERKEY}" ]; then
-                 echo "KDC database master key is empty (KDB5_MASTERKEY)" 1>&2
-                 exit 1
-               fi
-               expect -c "
-               set timeout 5
-               spawn kdb5_util create -s
-               expect \"Enter KDC database master key:\"
-               send -- \"${KDB5_MASTERKEY}\n\"
-               expect \"Re-enter KDC database master key to verify:\"
-               send -- \"${KDB5_MASTERKEY}\n\"
-               expect \"#\"
-               "
+           command: ["/script/create-db.sh"]
            volumeMounts:
              - mountPath: /var/log/krb5kdc
                name: kdc-data
@@ -71,6 +55,8 @@ spec:
              - mountPath: /var/lib/krb5kdc
                name: kdc-data
                subPath: lib.krb5kdc
+             - mountPath: /script
+               name: krb5-script
       nodeSelector:
         kubernetes.io/hostname: ode-kerberos
       volumes:
@@ -78,4 +64,8 @@ spec:
           hostPath:
             path: /volumes/krb5-server
             type: Directory
+        - name: krb5-script
+          configMap:
+            name: krb5-script
+            defaultMode: 0744
 ...

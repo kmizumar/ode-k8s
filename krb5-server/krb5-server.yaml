@@ -1,0 +1,64 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: krb5-server
+spec:
+  selector:
+    matchLabels:
+      app: krb5-server
+  template:
+    metadata:
+      labels:
+        app: krb5-server
+    spec:
+      containers:
+        - name: krb5-server
+          image: pfnmaru/krb5-server
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - mountPath: /var/log/krb5kdc
+              name: kdc-data
+              subPath: log.krb5kdc
+            - mountPath: /var/lib/krb5kdc
+              name: kdc-data
+              subPath: lib.krb5kdc
+      initContainers:
+         - name: krb5-server-init
+           image: pfnmaru/krb5-server
+           imagePullPolicy: IfNotPresent
+           env:
+             - name: KDB5_MASTERKEY
+               value: "PLEASE_CHANGE_ME"
+           command: ["bash", "-c"]
+           args:
+             - |
+               set -e
+               if [ -z "${KDB5_MASTERKEY}" ]; then
+                 echo "KDC database master key is empty (KDB5_MASTERKEY)" 1>&2
+                 exit 1
+               fi
+               expect -c "
+               set timeout 5
+               spawn kdb5_util create -s
+               expect \"Enter KDC database master key:\"
+               send -- \"${KDB5_MASTERKEY}\n\"
+               expect \"Re-enter KDC database master key to verify:\"
+               send -- \"${KDB5_MASTERKEY}\n\"
+               expect \"#\"
+               "
+           volumeMounts:
+             - mountPath: /var/log/krb5kdc
+               name: kdc-data
+               subPath: log.krb5kdc
+             - mountPath: /var/lib/krb5kdc
+               name: kdc-data
+               subPath: lib.krb5kdc
+      nodeSelector:
+        kubernetes.io/hostname: ode-kerberos
+      volumes:
+        - name: kdc-data
+          hostPath:
+            path: /volumes/krb5-server
+            type: Directory
+...

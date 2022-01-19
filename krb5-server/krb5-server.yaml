@@ -1,4 +1,21 @@
 ---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ode-kerberos
+  labels:
+    app: krb5-server
+spec:
+  ports:
+    - port: 88
+      protocol: UDP
+      name: kerberos
+    - port: 750
+      protocol: UDP
+      name: kerberos-sec
+  selector:
+    app: krb5-server
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:

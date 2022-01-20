@@ -52,19 +52,21 @@ spec:
             - mountPath: /var/log/hadoop
               name: ozone-data
               subPath: log.hadoop
+            - mountPath: /opt/hadoop/etc/hadoop
+              name: ozone-data
+              subPath: etc.hadoop
             - mountPath: /data
               name: ozone-data
               subPath: data
-            - mountPath: /opt/hadoop/etc/hadoop
-              name: scm-config
       initContainers:
         - name: scm-init-path
           image: alpine
           imagePullPolicy: IfNotPresent
           command: ["/bin/sh", "-c"]
           args:
-            - chmod 777 /var/log/hadoop
-            - chmod 777 /data
+            - |
+              chmod 777 /var/log/hadoop;
+              chmod 777 /data
           volumeMounts:
             - mountPath: /var/log/hadoop
               name: ozone-data
@@ -80,13 +82,14 @@ spec:
             - mountPath: /var/log/hadoop
               name: ozone-data
               subPath: log.hadoop
+            - mountPath: /opt/hadoop/etc/hadoop
+              name: ozone-data
+              subPath: etc.hadoop
             - mountPath: /data
               name: ozone-data
               subPath: data
             - mountPath: /script
               name: scm-script
-            - mountPath: /opt/hadoop/etc/hadoop
-              name: scm-config
       volumes:
         - name: ozone-data
           hostPath:
@@ -96,7 +99,4 @@ spec:
           configMap:
             name: scm-script
             defaultMode: 0744
-        - name: scm-config
-          configMap:
-            name: scm-config
 ...

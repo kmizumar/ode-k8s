@@ -2,11 +2,33 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-- krb5-server/krb5-server.yaml
+  - krb5-server/krb5-server.yaml
+  - scm/scm.yaml
 configMapGenerator:
-- name: krb5-script
-  files:
-  - krb5-server/create-db.sh
-  options:
-    disableNameSuffixHash: true
+  - name: krb5-script
+    files:
+      - krb5-server/create-db.sh
+    options:
+      disableNameSuffixHash: true
+  - name: scm-script
+    files:
+      - scm/bootstrap-scm.sh
+    options:
+      disableNameSuffixHash: true
+  - name: scm-config
+    files:
+      - scm/etc.hadoop/core-site.xml
+      - scm/etc.hadoop/dn-audit-log4j2.properties
+      - scm/etc.hadoop/hadoop-metrics2.properties
+      - scm/etc.hadoop/hadoop-policy.xml
+      - scm/etc.hadoop/log4j.properties
+      - scm/etc.hadoop/network-topology-default.xml
+      - scm/etc.hadoop/network-topology-nodegroup.xml
+      - scm/etc.hadoop/om-audit-log4j2.properties
+      - scm/etc.hadoop/ozone-env.sh
+      - scm/etc.hadoop/ozone-shell-log4j.properties
+      - scm/etc.hadoop/ozone-site.xml
+      - scm/etc.hadoop/scm-audit-log4j2.properties
+    options:
+      disableNameSuffixHash: true
 ...

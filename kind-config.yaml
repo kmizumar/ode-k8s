@@ -23,6 +23,9 @@ nodes:
       kubeletExtraArgs:
         node-labels: "ode/nodetype=recon"
 - role: worker
+  extraMounts:
+  - hostPath: scm/hostpath/scm0
+    containerPath: /volumes/scm
   kubeadmConfigPatches:
   - |
     kind: JoinConfiguration
@@ -31,6 +34,9 @@ nodes:
       kubeletExtraArgs:
         node-labels: "ode/nodetype=scm"
 - role: worker
+  extraMounts:
+  - hostPath: scm/hostpath/scm1
+    containerPath: /volumes/scm
   kubeadmConfigPatches:
   - |
     kind: JoinConfiguration
@@ -39,6 +45,9 @@ nodes:
       kubeletExtraArgs:
         node-labels: "ode/nodetype=scm"
 - role: worker
+  extraMounts:
+  - hostPath: scm/hostpath/scm2
+    containerPath: /volumes/scm
   kubeadmConfigPatches:
   - |
     kind: JoinConfiguration

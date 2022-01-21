@@ -68,6 +68,13 @@ spec:
         - mountPath: /data
           name: ozone-data
           subPath: data
+      env:
+        - name: OZONE_LOG_DIR
+          value: /var/log/hadoop
+        - name: OZONE_ROOT_LOGGER
+          value: "INFO,RFA"
+        - name: OZONE_LOGFILE
+          value: ozone-anonymous-scm-scm-2.log
   initContainers:
     - name: scm-init-path
       image: alpine
@@ -121,6 +128,13 @@ spec:
           subPath: data
         - mountPath: /script
           name: scm-script
+      env:
+        - name: OZONE_LOG_DIR
+          value: /var/log/hadoop
+        - name: OZONE_ROOT_LOGGER
+          value: "INFO,RFA"
+        - name: OZONE_LOGFILE
+          value: ozone-anonymous-scm-scm-2.log
   volumes:
     - name: ozone-data
       hostPath:

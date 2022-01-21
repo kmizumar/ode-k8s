@@ -16,11 +16,11 @@
   </property>
   <property>
     <name>ozone.scm.node.id</name>
-    <value>scm2</value>
+    <value>scm-2</value>
   </property>
   <property>
     <name>ozone.scm.primordial.node.id</name>
-    <value>scm0</value>
+    <value>scm-0</value>
   </property>
   <property>
     <name>ozone.scm.ratis.enable</name>
@@ -56,18 +56,18 @@
   </property>
   <property>
     <name>ozone.scm.nodes.scmservice</name>
-    <value>scm0,scm1,scm2</value>
+    <value>scm-0,scm-1,scm-2</value>
   </property>
   <property>
-    <name>ozone.scm.address.scmservice.scm0</name>
-    <value>scm-0.scm.default.svc.cluster.local</value>
+    <name>ozone.scm.address.scmservice.scm-0</name>
+    <value>scm-0</value>
   </property>
   <property>
-    <name>ozone.scm.address.scmservice.scm1</name>
-    <value>scm-1.scm.default.svc.cluster.local</value>
+    <name>ozone.scm.address.scmservice.scm-1</name>
+    <value>scm-1</value>
   </property>
   <property>
-    <name>ozone.scm.address.scmservice.scm2</name>
-    <value>scm-2.scm.default.svc.cluster.local</value>
+    <name>ozone.scm.address.scmservice.scm-2</name>
+    <value>scm-2</value>
   </property>
 </configuration>

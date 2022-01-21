@@ -1,0 +1,133 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: scm-0
+  labels:
+    app: ozone
+    component: scm-0
+spec:
+  ports:
+    - port: 9860
+      name: client
+    - port: 9861
+      name: datanode
+    - port: 9863
+      name: block-client
+    - port: 9876
+      name: http-address
+    - port: 9894
+      name: ratis
+    - port: 9895
+      name: grpc
+    - port: 9961
+      name: security
+  selector:
+    app: ozone
+    component: scm-0
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: scm-0
+  labels:
+    app: ozone
+    component: scm-0
+spec:
+  hostname: scm-0
+  nodeSelector:
+    kubernetes.io/hostname: ode-scm0
+  containers:
+    - name: scm
+      image: pfnmaru/ozone-runner
+      imagePullPolicy: IfNotPresent
+      args:
+        ["ozone", "scm"]
+      ports:
+        - containerPort: 9860
+          name: client
+        - containerPort: 9861
+          name: datanode
+        - containerPort: 9863
+          name: block-client
+        - containerPort: 9876
+          name: http-address
+        - containerPort: 9894
+          name: ratis
+        - containerPort: 9895
+          name: grpc
+        - containerPort: 9961
+          name: security
+      volumeMounts:
+        - mountPath: /var/log/hadoop
+          name: ozone-data
+          subPath: log.hadoop
+        - mountPath: /opt/hadoop/etc/hadoop
+          name: ozone-data
+          subPath: etc.hadoop
+        - mountPath: /data
+          name: ozone-data
+          subPath: data
+  initContainers:
+    - name: scm-init-path
+      image: alpine
+      imagePullPolicy: IfNotPresent
+      command: ["/bin/sh", "-c"]
+      args:
+        - |
+          chmod 777 /var/log/hadoop
+          chmod 777 /data
+          for i in 1 2; do
+              until nslookup scm-${i}.default.svc.cluster.local; do
+                  echo waiting for scm-${i}.default.svc.cluster.local
+                  sleep 2
+              done
+          done
+      volumeMounts:
+        - mountPath: /var/log/hadoop
+          name: ozone-data
+          subPath: log.hadoop
+        - mountPath: /data
+          name: ozone-data
+          subPath: data
+    - name: scm-init
+      image: pfnmaru/ozone-runner
+      imagePullPolicy: IfNotPresent
+      command: ["/script/bootstrap-scm.sh"]
+      ports:
+        - containerPort: 9860
+          name: client
+        - containerPort: 9861
+          name: datanode
+        - containerPort: 9863
+          name: block-client
+        - containerPort: 9876
+          name: http-address
+        - containerPort: 9894
+          name: ratis
+        - containerPort: 9895
+          name: grpc
+        - containerPort: 9961
+          name: security
+      volumeMounts:
+        - mountPath: /var/log/hadoop
+          name: ozone-data
+          subPath: log.hadoop
+        - mountPath: /opt/hadoop/etc/hadoop
+          name: ozone-data
+          subPath: etc.hadoop
+        - mountPath: /data
+          name: ozone-data
+          subPath: data
+        - mountPath: /script
+          name: scm-script
+  volumes:
+    - name: ozone-data
+      hostPath:
+        path: /volumes/scm
+        type: Directory
+    - name: scm-script
+      configMap:
+        name: scm-script
+        defaultMode: 0744
+...

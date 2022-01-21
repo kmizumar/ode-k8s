@@ -13,6 +13,9 @@ RUN apt-get update && \
     libpam-krb5 \
     libpam-ccreds \
     openjdk-11-jdk-headless \
+    iputils-ping \
+    net-tools \
+    bind9-dnsutils \
     dumb-init \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/*

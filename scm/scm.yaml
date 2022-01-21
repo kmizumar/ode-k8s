@@ -8,8 +8,10 @@ metadata:
 spec:
   clusterIP: None
   ports:
+    - port: 9863
+      name: block-client
     - port: 9876
-      name: ui
+      name: http-address
   selector:
     app: ozone
     component: scm
@@ -21,12 +23,13 @@ metadata:
   labels:
     app.kubernetes.io/component: ozone
 spec:
+  serviceName: scm
+  replicas: 3
+  podManagementPolicy: Parallel
   selector:
     matchLabels:
       app: ozone
       component: scm
-  serviceName: scm
-  replicas: 3
   template:
     metadata:
       labels:
@@ -48,6 +51,11 @@ spec:
           imagePullPolicy: IfNotPresent
           args:
             ["ozone", "scm"]
+          ports:
+            - containerPort: 9863
+              name: block-client
+            - containerPort: 9876
+              name: http-address
           volumeMounts:
             - mountPath: /var/log/hadoop
               name: ozone-data
@@ -65,8 +73,14 @@ spec:
           command: ["/bin/sh", "-c"]
           args:
             - |
-              chmod 777 /var/log/hadoop;
+              chmod 777 /var/log/hadoop
               chmod 777 /data
+              for i in $(seq 0 2); do
+                  until nslookup scm-${i}.scm.default.svc.cluster.local; do
+                      echo waiting for scm-${i}.scm.default.svc.cluster.local
+                      sleep 2
+                  done
+              done
           volumeMounts:
             - mountPath: /var/log/hadoop
               name: ozone-data
@@ -78,6 +92,11 @@ spec:
           image: pfnmaru/ozone-runner
           imagePullPolicy: IfNotPresent
           command: ["/script/bootstrap-scm.sh"]
+          ports:
+            - containerPort: 9863
+              name: block-client
+            - containerPort: 9876
+              name: http-address
           volumeMounts:
             - mountPath: /var/log/hadoop
               name: ozone-data

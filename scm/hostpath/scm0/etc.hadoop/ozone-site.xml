@@ -60,14 +60,14 @@
   </property>
   <property>
     <name>ozone.scm.address.scmservice.scm0</name>
-    <value>scm-0</value>
+    <value>scm-0.scm.default.svc.cluster.local</value>
   </property>
   <property>
     <name>ozone.scm.address.scmservice.scm1</name>
-    <value>scm-1</value>
+    <value>scm-1.scm.default.svc.cluster.local</value>
   </property>
   <property>
     <name>ozone.scm.address.scmservice.scm2</name>
-    <value>scm-2</value>
+    <value>scm-2.scm.default.svc.cluster.local</value>
   </property>
 </configuration>

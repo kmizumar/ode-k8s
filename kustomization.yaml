@@ -2,11 +2,19 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-- krb5-server/krb5-server.yaml
+  - krb5-server/krb5-server.yaml
+  - scm/scm-0.yaml
+  - scm/scm-1.yaml
+  - scm/scm-2.yaml
 configMapGenerator:
-- name: krb5-script
-  files:
-  - krb5-server/create-db.sh
-  options:
-    disableNameSuffixHash: true
+  - name: krb5-script
+    files:
+      - krb5-server/create-db.sh
+    options:
+      disableNameSuffixHash: true
+  - name: scm-script
+    files:
+      - scm/bootstrap-scm.sh
+    options:
+      disableNameSuffixHash: true
 ...

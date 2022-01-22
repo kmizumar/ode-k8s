@@ -59,10 +59,10 @@ spec:
         - containerPort: 9961
           name: security
       volumeMounts:
-        - mountPath: /var/log/hadoop
+        - mountPath: /var/log/ozone
           name: ozone-data
-          subPath: log.hadoop
-        - mountPath: /opt/hadoop/etc/hadoop
+          subPath: log.ozone
+        - mountPath: /opt/ozone/etc/hadoop
           name: ozone-data
           subPath: etc.hadoop
         - mountPath: /data
@@ -70,11 +70,11 @@ spec:
           subPath: data
       env:
         - name: OZONE_LOG_DIR
-          value: /var/log/hadoop
+          value: /var/log/ozone
         - name: OZONE_ROOT_LOGGER
           value: "INFO,RFA"
         - name: OZONE_LOGFILE
-          value: ozone-anonymous-scm-scm-2.log
+          value: ozone-ozone-scm-scm-2.log
   initContainers:
     - name: scm-init-path
       image: alpine
@@ -82,7 +82,7 @@ spec:
       command: ["/bin/sh", "-c"]
       args:
         - |
-          chmod 777 /var/log/hadoop
+          chmod 777 /var/log/ozone
           chmod 777 /data
           for i in 0 1; do
               until nslookup scm-${i}.default.svc.cluster.local; do
@@ -91,9 +91,9 @@ spec:
               done
           done
       volumeMounts:
-        - mountPath: /var/log/hadoop
+        - mountPath: /var/log/ozone
           name: ozone-data
-          subPath: log.hadoop
+          subPath: log.ozone
         - mountPath: /data
           name: ozone-data
           subPath: data
@@ -117,10 +117,10 @@ spec:
         - containerPort: 9961
           name: security
       volumeMounts:
-        - mountPath: /var/log/hadoop
+        - mountPath: /var/log/ozone
           name: ozone-data
-          subPath: log.hadoop
-        - mountPath: /opt/hadoop/etc/hadoop
+          subPath: log.ozone
+        - mountPath: /opt/ozone/etc/hadoop
           name: ozone-data
           subPath: etc.hadoop
         - mountPath: /data
@@ -130,11 +130,11 @@ spec:
           name: scm-script
       env:
         - name: OZONE_LOG_DIR
-          value: /var/log/hadoop
+          value: /var/log/ozone
         - name: OZONE_ROOT_LOGGER
           value: "INFO,RFA"
         - name: OZONE_LOGFILE
-          value: ozone-anonymous-scm-scm-2.log
+          value: ozone-ozone-scm-scm-2.log
   volumes:
     - name: ozone-data
       hostPath:

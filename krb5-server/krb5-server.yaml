@@ -8,10 +8,8 @@ metadata:
 spec:
   ports:
     - port: 88
-      protocol: UDP
       name: kerberos
     - port: 750
-      protocol: UDP
       name: kerberos-sec
   selector:
     app: krb5-server
@@ -40,6 +38,11 @@ spec:
             - mountPath: /var/lib/krb5kdc
               name: kdc-data
               subPath: lib.krb5kdc
+          ports:
+            - containerPort: 88
+              name: kerberos
+            - containerPort: 750
+              name: kerberos-sec
       initContainers:
          - name: krb5-server-init
            image: pfnmaru/krb5-server

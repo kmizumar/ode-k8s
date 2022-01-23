@@ -3,6 +3,26 @@
 
 <configuration>
   <property>
+    <name>ozone.security.enabled</name>
+    <value>true</value>
+  </property>
+  <property>
+    <name>ozone.security.http.kerberos.enabled</name>
+    <value>true</value>
+  </property>
+  <property>
+    <name>ozone.http.filter.initializers</name>
+    <value>org.apache.hadoop.security.AuthenticationFilterInitializer</value>
+  </property>
+  <property>
+    <name>ozone.administrators</name>
+    <value>ozone@EXAMPLE.COM</value>
+  </property>
+  <property>
+    <name>ozone.metadata.dirs</name>
+    <value>/data/ozone.metadata.dirs</value>
+  </property>
+  <property>
     <name>ozone.scm.db.dirs</name>
     <value>/data/ozone.scm.db.dirs</value>
   </property>
@@ -44,7 +64,7 @@
   </property>
   <property>
     <name>hdds.scm.http.auth.type</name>
-    <value>simple</value>
+    <value>kerberos</value>
   </property>
   <property>
     <name>ozone.scm.service.ids</name>

@@ -35,6 +35,7 @@ metadata:
     component: scm-0
 spec:
   hostname: scm-0
+  subdomain: ode
   nodeSelector:
     kubernetes.io/hostname: ode-scm0
   containers:
@@ -68,6 +69,8 @@ spec:
         - mountPath: /data
           name: ozone-data
           subPath: data
+        - mountPath: /etc/security/keytabs
+          name: keytabs
       env:
         - name: OZONE_LOG_DIR
           value: /var/log/ozone
@@ -85,8 +88,8 @@ spec:
           chmod 777 /var/log/ozone
           chmod 777 /data
           for i in 1 2; do
-              until nslookup scm-${i}.default.svc.cluster.local; do
-                  echo waiting for scm-${i}.default.svc.cluster.local
+              until nslookup scm-${i}.ode.default.svc.cluster.local; do
+                  echo waiting for scm-${i}.ode.default.svc.cluster.local
                   sleep 2
               done
           done
@@ -128,6 +131,8 @@ spec:
           subPath: data
         - mountPath: /script
           name: scm-script
+        - mountPath: /etc/security/keytabs
+          name: keytabs
       env:
         - name: OZONE_LOG_DIR
           value: /var/log/ozone
@@ -144,4 +149,7 @@ spec:
       configMap:
         name: scm-script
         defaultMode: 0744
+    - name: keytabs
+      configMap:
+        name: keytabs
 ...

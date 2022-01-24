@@ -2,65 +2,49 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: scm-0
+  name: om-0
   labels:
     app: ozone
-    component: scm-0
+    component: om-0
 spec:
   clusterIP: None
   ports:
-    - port: 9860
+    - port: 9862
       name: client
-    - port: 9861
-      name: datanode
-    - port: 9863
-      name: block-client
-    - port: 9876
-      name: http-address
-    - port: 9894
+    - port: 9872
       name: ratis
-    - port: 9895
-      name: grpc
-    - port: 9961
-      name: security
+    - port: 9874
+      name: http-address
   selector:
     app: ozone
-    component: scm-0
+    component: om-0
   publishNotReadyAddresses: true
 ---
 apiVersion: v1
 kind: Pod
 metadata:
-  name: scm-0
+  name: om-0
   labels:
     app: ozone
-    component: scm-0
+    component: om-0
 spec:
-  hostname: scm-0
+  hostname: om-0
   setHostnameAsFQDN: true
   nodeSelector:
-    kubernetes.io/hostname: ode-scm0
+    kubernetes.io/hostname: ode-om0
   containers:
-    - name: scm
+    - name: om
       image: pfnmaru/ozone-runner
       imagePullPolicy: IfNotPresent
       args:
-        ["ozone", "scm"]
+        ["ozone", "om"]
       ports:
-        - containerPort: 9860
+        - containerPort: 9862
           name: client
-        - containerPort: 9861
-          name: datanode
-        - containerPort: 9863
-          name: block-client
-        - containerPort: 9876
-          name: http-address
-        - containerPort: 9894
+        - containerPort: 9872
           name: ratis
-        - containerPort: 9895
-          name: grpc
-        - containerPort: 9961
-          name: security
+        - containerPort: 9874
+          name: http-address
       volumeMounts:
         - mountPath: /var/log/ozone
           name: ozone-data
@@ -79,7 +63,7 @@ spec:
         - name: OZONE_ROOT_LOGGER
           value: "INFO,RFA"
         - name: OZONE_LOGFILE
-          value: ozone-ozone-scm-scm-0.log
+          value: ozone-ozone-om-om-0.log
   initContainers:
     - name: wait
       image: alpine
@@ -90,8 +74,8 @@ spec:
           chmod 777 /var/log/ozone
           chmod 777 /data
           for i in 1 2; do
-              until nslookup scm-${i}.default.svc.cluster.local; do
-                  echo waiting for scm-${i}.default.svc.cluster.local
+              until nslookup om-${i}.default.svc.cluster.local; do
+                  echo waiting for om-${i}.default.svc.cluster.local
                   sleep 2
               done
           done
@@ -105,22 +89,14 @@ spec:
     - name: init
       image: pfnmaru/ozone-runner
       imagePullPolicy: IfNotPresent
-      command: ["/script/bootstrap-scm.sh"]
+      command: ["/script/bootstrap-om.sh"]
       ports:
-        - containerPort: 9860
+        - containerPort: 9862
           name: client
-        - containerPort: 9861
-          name: datanode
-        - containerPort: 9863
-          name: block-client
-        - containerPort: 9876
-          name: http-address
-        - containerPort: 9894
+        - containerPort: 9872
           name: ratis
-        - containerPort: 9895
-          name: grpc
-        - containerPort: 9961
-          name: security
+        - containerPort: 9874
+          name: http-address
       volumeMounts:
         - mountPath: /var/log/ozone
           name: ozone-data
@@ -132,7 +108,7 @@ spec:
           name: ozone-data
           subPath: data
         - mountPath: /script
-          name: scm-script
+          name: om-script
         - mountPath: /etc/security/keytabs
           name: keytabs
       env:
@@ -141,15 +117,15 @@ spec:
         - name: OZONE_ROOT_LOGGER
           value: "INFO,RFA"
         - name: OZONE_LOGFILE
-          value: ozone-ozone-scm-scm-0.log
+          value: ozone-ozone-om-om-0.log
   volumes:
     - name: ozone-data
       hostPath:
-        path: /volumes/scm
+        path: /volumes/om
         type: Directory
-    - name: scm-script
+    - name: om-script
       configMap:
-        name: scm-script
+        name: om-script
         defaultMode: 0744
     - name: keytabs
       configMap:

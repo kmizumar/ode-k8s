@@ -56,6 +56,9 @@ nodes:
       kubeletExtraArgs:
         node-labels: "ode/nodetype=scm"
 - role: worker
+  extraMounts:
+  - hostPath: om/hostpath/om0
+    containerPath: /volumes/om
   kubeadmConfigPatches:
   - |
     kind: JoinConfiguration
@@ -64,6 +67,9 @@ nodes:
       kubeletExtraArgs:
         node-labels: "ode/nodetype=om"
 - role: worker
+  extraMounts:
+  - hostPath: om/hostpath/om1
+    containerPath: /volumes/om
   kubeadmConfigPatches:
   - |
     kind: JoinConfiguration
@@ -72,6 +78,9 @@ nodes:
       kubeletExtraArgs:
         node-labels: "ode/nodetype=om"
 - role: worker
+  extraMounts:
+  - hostPath: om/hostpath/om2
+    containerPath: /volumes/om
   kubeadmConfigPatches:
   - |
     kind: JoinConfiguration

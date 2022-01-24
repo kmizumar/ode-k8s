@@ -7,6 +7,7 @@ metadata:
     app: ozone
     component: scm-0
 spec:
+  clusterIP: None
   ports:
     - port: 9860
       name: client
@@ -25,6 +26,7 @@ spec:
   selector:
     app: ozone
     component: scm-0
+  publishNotReadyAddresses: true
 ---
 apiVersion: v1
 kind: Pod
@@ -35,6 +37,7 @@ metadata:
     component: scm-0
 spec:
   hostname: scm-0
+  setHostnameAsFQDN: true
   nodeSelector:
     kubernetes.io/hostname: ode-scm0
   containers:
@@ -43,6 +46,7 @@ spec:
       imagePullPolicy: IfNotPresent
       args:
         ["ozone", "scm"]
+        # ["sleep", "1d"]
       ports:
         - containerPort: 9860
           name: client
@@ -68,6 +72,8 @@ spec:
         - mountPath: /data
           name: ozone-data
           subPath: data
+        - mountPath: /etc/security/keytabs
+          name: keytabs
       env:
         - name: OZONE_LOG_DIR
           value: /var/log/ozone
@@ -76,7 +82,7 @@ spec:
         - name: OZONE_LOGFILE
           value: ozone-ozone-scm-scm-0.log
   initContainers:
-    - name: scm-init-path
+    - name: wait
       image: alpine
       imagePullPolicy: IfNotPresent
       command: ["/bin/sh", "-c"]
@@ -97,7 +103,7 @@ spec:
         - mountPath: /data
           name: ozone-data
           subPath: data
-    - name: scm-init
+    - name: init
       image: pfnmaru/ozone-runner
       imagePullPolicy: IfNotPresent
       command: ["/script/bootstrap-scm.sh"]
@@ -128,6 +134,8 @@ spec:
           subPath: data
         - mountPath: /script
           name: scm-script
+        - mountPath: /etc/security/keytabs
+          name: keytabs
       env:
         - name: OZONE_LOG_DIR
           value: /var/log/ozone
@@ -144,4 +152,7 @@ spec:
       configMap:
         name: scm-script
         defaultMode: 0744
+    - name: keytabs
+      configMap:
+        name: keytabs
 ...

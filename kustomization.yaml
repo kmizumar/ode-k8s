@@ -7,6 +7,12 @@ resources:
   - scm/scm-1.yaml
   - scm/scm-2.yaml
 configMapGenerator:
+  - name: keytabs
+    files:
+      - security/HTTP.keytab
+      - security/SCM.keytab
+    options:
+      disableNameSuffixHash: true
   - name: krb5-script
     files:
       - krb5-server/create-db.sh

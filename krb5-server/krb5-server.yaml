@@ -44,7 +44,7 @@ spec:
             - containerPort: 750
               name: kerberos-sec
       initContainers:
-         - name: krb5-server-init
+         - name: init
            image: pfnmaru/krb5-server
            imagePullPolicy: IfNotPresent
            env:

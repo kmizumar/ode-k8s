@@ -7,6 +7,7 @@ metadata:
     app: ozone
     component: scm-1
 spec:
+  clusterIP: None
   ports:
     - port: 9860
       name: client
@@ -25,6 +26,7 @@ spec:
   selector:
     app: ozone
     component: scm-1
+  publishNotReadyAddresses: true
 ---
 apiVersion: v1
 kind: Pod
@@ -35,7 +37,7 @@ metadata:
     component: scm-1
 spec:
   hostname: scm-1
-  subdomain: ode
+  setHostnameAsFQDN: true
   nodeSelector:
     kubernetes.io/hostname: ode-scm1
   containers:
@@ -79,7 +81,7 @@ spec:
         - name: OZONE_LOGFILE
           value: ozone-ozone-scm-scm-1.log
   initContainers:
-    - name: scm-init-path
+    - name: wait
       image: alpine
       imagePullPolicy: IfNotPresent
       command: ["/bin/sh", "-c"]
@@ -88,8 +90,8 @@ spec:
           chmod 777 /var/log/ozone
           chmod 777 /data
           for i in 0 2; do
-              until nslookup scm-${i}.ode.default.svc.cluster.local; do
-                  echo waiting for scm-${i}.ode.default.svc.cluster.local
+              until nslookup scm-${i}.default.svc.cluster.local; do
+                  echo waiting for scm-${i}.default.svc.cluster.local
                   sleep 2
               done
           done
@@ -100,7 +102,7 @@ spec:
         - mountPath: /data
           name: ozone-data
           subPath: data
-    - name: scm-init
+    - name: init
       image: pfnmaru/ozone-runner
       imagePullPolicy: IfNotPresent
       command: ["/script/bootstrap-scm.sh"]

@@ -56,11 +56,11 @@
   </property>
   <property>
     <name>hdds.scm.kerberos.principal</name>
-    <value>SCM/_HOST@EXAMPLE.COM</value>
+    <value>SCM/_@EXAMPLE.COM</value>
   </property>
   <property>
     <name>hdds.scm.http.auth.kerberos.principal</name>
-    <value>HTTP/_HOST@EXAMPLE.COM</value>
+    <value>HTTP/_@EXAMPLE.COM</value>
   </property>
   <property>
     <name>hdds.scm.http.auth.type</name>

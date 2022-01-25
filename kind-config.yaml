@@ -89,6 +89,9 @@ nodes:
       kubeletExtraArgs:
         node-labels: "ode/nodetype=om"
 - role: worker
+  extraMounts:
+  - hostPath: datanode/hostpath/dn0
+    containerPath: /volumes/dn
   kubeadmConfigPatches:
   - |
     kind: JoinConfiguration
@@ -97,6 +100,9 @@ nodes:
       kubeletExtraArgs:
         node-labels: "ode/nodetype=datanode"
 - role: worker
+  extraMounts:
+  - hostPath: datanode/hostpath/dn1
+    containerPath: /volumes/dn
   kubeadmConfigPatches:
   - |
     kind: JoinConfiguration
@@ -105,6 +111,9 @@ nodes:
       kubeletExtraArgs:
         node-labels: "ode/nodetype=datanode"
 - role: worker
+  extraMounts:
+  - hostPath: datanode/hostpath/dn2
+    containerPath: /volumes/dn
   kubeadmConfigPatches:
   - |
     kind: JoinConfiguration

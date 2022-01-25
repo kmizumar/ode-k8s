@@ -1,0 +1,82 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: dn-2
+  labels:
+    app: ozone
+    component: dn-2
+spec:
+  clusterIP: None
+  ports:
+    - port: 6666
+      name: foo
+  selector:
+    app: ozone
+    component: dn-2
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: dn-2
+  labels:
+    app: ozone
+    component: dn-2
+spec:
+  hostname: dn-2
+  setHostnameAsFQDN: true
+  nodeSelector:
+    kubernetes.io/hostname: ode-dn2
+  containers:
+    - name: dn
+      image: pfnmaru/ozone-runner
+      imagePullPolicy: IfNotPresent
+      args:
+        ["ozone", "datanode"]
+      ports:
+        - containerPort: 6666
+          name: foo
+      volumeMounts:
+        - mountPath: /var/log/ozone
+          name: ozone-data
+          subPath: log.ozone
+        - mountPath: /opt/ozone/etc/hadoop
+          name: ozone-data
+          subPath: etc.hadoop
+        - mountPath: /data
+          name: ozone-data
+          subPath: data
+        - mountPath: /etc/security/keytabs
+          name: keytabs
+      env:
+        - name: OZONE_LOG_DIR
+          value: /var/log/ozone
+        - name: OZONE_ROOT_LOGGER
+          value: "INFO,RFA"
+        - name: OZONE_LOGFILE
+          value: ozone-ozone-datanode-dn-2.log
+  initContainers:
+    - name: chmod
+      image: alpine
+      imagePullPolicy: IfNotPresent
+      command: ["/bin/sh", "-c"]
+      args:
+        - |
+          chmod 777 /var/log/ozone
+          chmod 777 /data
+      volumeMounts:
+        - mountPath: /var/log/ozone
+          name: ozone-data
+          subPath: log.ozone
+        - mountPath: /data
+          name: ozone-data
+          subPath: data
+  volumes:
+    - name: ozone-data
+      hostPath:
+        path: /volumes/dn
+        type: Directory
+    - name: keytabs
+      configMap:
+        name: keytabs
+...

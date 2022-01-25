@@ -9,12 +9,16 @@ resources:
   - om/om-0.yaml
   - om/om-1.yaml
   - om/om-2.yaml
+  - datanode/dn-0.yaml
+  - datanode/dn-1.yaml
+  - datanode/dn-2.yaml
 configMapGenerator:
   - name: keytabs
     files:
       - security/HTTP.keytab
       - security/SCM.keytab
       - security/OM.keytab
+      - security/HDDS.keytab
     options:
       disableNameSuffixHash: true
   - name: krb5-script

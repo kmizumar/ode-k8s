@@ -15,6 +15,9 @@ nodes:
       kubeletExtraArgs:
         node-labels: "ode/nodetype=kerberos"
 - role: worker
+  extraMounts:
+  - hostPath: recon/hostpath
+    containerPath: /volumes/recon
   kubeadmConfigPatches:
   - |
     kind: JoinConfiguration

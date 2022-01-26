@@ -90,4 +90,32 @@
     <name>ozone.scm.address.scmservice.scm-2</name>
     <value>scm-2</value>
   </property>
+  <property>
+    <name>ozone.om.kerberos.principal</name>
+    <value>OM/_@EXAMPLE.COM</value>
+  </property>
+  <property>
+    <name>ozone.om.http.auth.kerberos.principal</name>
+    <value>HTTP/_@EXAMPLE.COM</value>
+  </property>
+  <property>
+    <name>ozone.om.http.auth.type</name>
+    <value>kerberos</value>
+  </property>
+  <property>
+    <name>ozone.recon.kerberos.principal</name>
+    <value>RECON/_@EXAMPLE.COM</value>
+  </property>
+  <property>
+    <name>ozone.recon.http.auth.kerberos.principal</name>
+    <value>HTTP/_@EXAMPLE.COM</value>
+  </property>
+  <property>
+    <name>ozone.recon.http.auth.type</name>
+    <value>kerberos</value>
+  </property>
+  <property>
+    <name>ozone.recon.address</name>
+    <value>recon</value>
+  </property>
 </configuration>

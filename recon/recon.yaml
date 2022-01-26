@@ -8,8 +8,10 @@ metadata:
     component: recon
 spec:
   ports:
-    - port: 6666
-      name: foo
+    - port: 9888
+      name: http-address
+    - port: 9889
+      name: https-address
   selector:
     app: ozone
     component: recon
@@ -34,8 +36,10 @@ spec:
       args:
         ["ozone", "recon"]
       ports:
-        - containerPort: 6666
-          name: foo
+        - containerPort: 9888
+          name: http-address
+        - containerPort: 9889
+          name: https-port
       volumeMounts:
         - mountPath: /var/log/ozone
           name: ozone-data

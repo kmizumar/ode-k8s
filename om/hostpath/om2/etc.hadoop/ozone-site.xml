@@ -24,11 +24,11 @@
   </property>
   <property>
     <name>hdds.scm.kerberos.principal</name>
-    <value>SCM/_@EXAMPLE.COM</value>
+    <value>SCM/_HOST@EXAMPLE.COM</value>
   </property>
   <property>
     <name>hdds.scm.http.auth.kerberos.principal</name>
-    <value>HTTP/_@EXAMPLE.COM</value>
+    <value>HTTP/_HOST@EXAMPLE.COM</value>
   </property>
   <property>
     <name>hdds.scm.http.auth.type</name>
@@ -48,15 +48,15 @@
   </property>
   <property>
     <name>ozone.scm.address.scmservice.scm-0</name>
-    <value>scm-0</value>
+    <value>scm-0.scm-0.default.svc.cluster.local</value>
   </property>
   <property>
     <name>ozone.scm.address.scmservice.scm-1</name>
-    <value>scm-1</value>
+    <value>scm-1.scm-1.default.svc.cluster.local</value>
   </property>
   <property>
     <name>ozone.scm.address.scmservice.scm-2</name>
-    <value>scm-2</value>
+    <value>scm-2.scm-2.default.svc.cluster.local</value>
   </property>
   <property>
     <name>ozone.om.node.id</name>
@@ -84,11 +84,11 @@
   </property>
   <property>
     <name>ozone.om.kerberos.principal</name>
-    <value>OM/_@EXAMPLE.COM</value>
+    <value>OM/_HOST@EXAMPLE.COM</value>
   </property>
   <property>
     <name>ozone.om.http.auth.kerberos.principal</name>
-    <value>HTTP/_@EXAMPLE.COM</value>
+    <value>HTTP/_HOST@EXAMPLE.COM</value>
   </property>
   <property>
     <name>ozone.om.http.auth.type</name>
@@ -108,23 +108,23 @@
   </property>
   <property>
     <name>ozone.om.address.omservice.om-0</name>
-    <value>om-0</value>
+    <value>om-0.om-0.default.svc.cluster.local</value>
   </property>
   <property>
     <name>ozone.om.address.omservice.om-1</name>
-    <value>om-1</value>
+    <value>om-1.om-1.default.svc.cluster.local</value>
   </property>
   <property>
     <name>ozone.om.address.omservice.om-2</name>
-    <value>om-2</value>
+    <value>om-2.om-2.default.svc.cluster.local</value>
   </property>
   <property>
     <name>ozone.recon.kerberos.principal</name>
-    <value>RECON/_@EXAMPLE.COM</value>
+    <value>RECON/_HOST@EXAMPLE.COM</value>
   </property>
   <property>
     <name>ozone.recon.http.auth.kerberos.principal</name>
-    <value>HTTP/_@EXAMPLE.COM</value>
+    <value>HTTP/_HOST@EXAMPLE.COM</value>
   </property>
   <property>
     <name>ozone.recon.http.auth.type</name>
@@ -132,6 +132,6 @@
   </property>
   <property>
     <name>ozone.recon.address</name>
-    <value>recon</value>
+    <value>recon.recon.default.svc.cluster.local</value>
   </property>
 </configuration>

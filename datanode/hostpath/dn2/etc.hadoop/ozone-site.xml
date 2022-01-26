@@ -24,11 +24,11 @@
   </property>
   <property>
     <name>hdds.scm.kerberos.principal</name>
-    <value>SCM/_@EXAMPLE.COM</value>
+    <value>SCM/_HOST@EXAMPLE.COM</value>
   </property>
   <property>
     <name>hdds.scm.http.auth.kerberos.principal</name>
-    <value>HTTP/_@EXAMPLE.COM</value>
+    <value>HTTP/_HOST@EXAMPLE.COM</value>
   </property>
   <property>
     <name>hdds.scm.http.auth.type</name>
@@ -48,15 +48,15 @@
   </property>
   <property>
     <name>ozone.scm.address.scmservice.scm-0</name>
-    <value>scm-0</value>
+    <value>scm-0.scm-0.default.svc.cluster.local</value>
   </property>
   <property>
     <name>ozone.scm.address.scmservice.scm-1</name>
-    <value>scm-1</value>
+    <value>scm-1.scm-1.default.svc.cluster.local</value>
   </property>
   <property>
     <name>ozone.scm.address.scmservice.scm-2</name>
-    <value>scm-2</value>
+    <value>scm-2.scm-2.default.svc.cluster.local</value>
   </property>
   <property>
     <name>ozone.scm.datanode.id.dir</name>
@@ -84,11 +84,11 @@
   </property>
   <property>
     <name>dfs.datanode.kerberos.principal</name>
-    <value>HDDS/_@EXAMPLE.COM</value>
+    <value>HDDS/_HOST@EXAMPLE.COM</value>
   </property>
   <property>
     <name>hdds.datanode.http.auth.kerberos.principal</name>
-    <value>HTTP/_@EXAMPLE.COM</value>
+    <value>HTTP/_HOST@EXAMPLE.COM</value>
   </property>
   <property>
     <name>hdds.datanode.http.auth.type</name>

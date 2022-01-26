@@ -24,6 +24,7 @@ metadata:
     component: dn-1
 spec:
   hostname: dn-1
+  subdomain: dn-1
   setHostnameAsFQDN: true
   nodeSelector:
     kubernetes.io/hostname: ode-dn1

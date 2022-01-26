@@ -29,6 +29,7 @@ metadata:
     component: om-1
 spec:
   hostname: om-1
+  subdomain: om-1
   setHostnameAsFQDN: true
   nodeSelector:
     kubernetes.io/hostname: ode-om1

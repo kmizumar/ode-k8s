@@ -2,32 +2,48 @@
 set -euo pipefail
 
 http_princs=$(cat <<EOS
-HTTP/_@EXAMPLE.COM
+HTTP/scm-0.scm-0.default.svc.cluster.local@EXAMPLE.COM
+HTTP/scm-1.scm-1.default.svc.cluster.local@EXAMPLE.COM
+HTTP/scm-2.scm-2.default.svc.cluster.local@EXAMPLE.COM
+HTTP/om-0.om-0.default.svc.cluster.local@EXAMPLE.COM
+HTTP/om-1.om-1.default.svc.cluster.local@EXAMPLE.COM
+HTTP/om-2.om-2.default.svc.cluster.local@EXAMPLE.COM
+HTTP/dn-0.dn-0.default.svc.cluster.local@EXAMPLE.COM
+HTTP/dn-1.dn-1.default.svc.cluster.local@EXAMPLE.COM
+HTTP/dn-2.dn-2.default.svc.cluster.local@EXAMPLE.COM
+HTTP/recon.recon.default.svc.cluster.local@EXAMPLE.COM
+HTTP/s3g.s3g.default.svc.cluster.local@EXAMPLE.COM
 EOS
 )
 
 scm_princs=$(cat <<-EOS
-SCM/_@EXAMPLE.COM
+SCM/scm-0.scm-0.default.svc.cluster.local@EXAMPLE.COM
+SCM/scm-1.scm-1.default.svc.cluster.local@EXAMPLE.COM
+SCM/scm-2.scm-2.default.svc.cluster.local@EXAMPLE.COM
 EOS
 )
 
 om_princs=$(cat <<-EOS
-OM/_@EXAMPLE.COM
+OM/om-0.om-0.default.svc.cluster.local@EXAMPLE.COM
+OM/om-1.om-1.default.svc.cluster.local@EXAMPLE.COM
+OM/om-2.om-2.default.svc.cluster.local@EXAMPLE.COM
 EOS
 )
 
 dfs_princs=$(cat <<-EOS
-HDDS/_@EXAMPLE.COM
+HDDS/dn-0.dn-0.default.svc.cluster.local@EXAMPLE.COM
+HDDS/dn-1.dn-1.default.svc.cluster.local@EXAMPLE.COM
+HDDS/dn-2.dn-2.default.svc.cluster.local@EXAMPLE.COM
 EOS
 )
 
 recon_princs=$(cat <<-EOS
-RECON/_@EXAMPLE.COM
+RECON/recon.recon.default.svc.cluster.local@EXAMPLE.COM
 EOS
 )
 
 s3g_princs=$(cat <<-EOS
-S3G/_@EXAMPLE.COM
+S3G/s3g.s3g.default.svc.cluster.local@EXAMPLE.COM
 EOS
 )
 

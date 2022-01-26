@@ -26,6 +26,7 @@ metadata:
     component: recon
 spec:
   hostname: recon
+  subdomain: recon
   setHostnameAsFQDN: true
   nodeSelector:
     kubernetes.io/hostname: ode-recon

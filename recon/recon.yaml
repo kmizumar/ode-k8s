@@ -2,41 +2,45 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: dn-2
+  name: recon
   labels:
     app: ozone
-    component: dn-2
+    component: recon
 spec:
-  clusterIP: None
   ports:
-    - port: 6666
-      name: foo
+    - port: 9888
+      name: http-address
+    - port: 9889
+      name: https-address
   selector:
     app: ozone
-    component: dn-2
+    component: recon
+  publishNotReadyAddresses: true
 ---
 apiVersion: v1
 kind: Pod
 metadata:
-  name: dn-2
+  name: recon
   labels:
     app: ozone
-    component: dn-2
+    component: recon
 spec:
-  hostname: dn-2
-  subdomain: dn-2
+  hostname: recon
+  subdomain: recon
   setHostnameAsFQDN: true
   nodeSelector:
-    kubernetes.io/hostname: ode-dn2
+    kubernetes.io/hostname: ode-recon
   containers:
-    - name: dn
+    - name: recon
       image: pfnmaru/ozone-runner
       imagePullPolicy: IfNotPresent
       args:
-        ["ozone", "datanode"]
+        ["ozone", "recon"]
       ports:
-        - containerPort: 6666
-          name: foo
+        - containerPort: 9888
+          name: http-address
+        - containerPort: 9889
+          name: https-port
       volumeMounts:
         - mountPath: /var/log/ozone
           name: ozone-data
@@ -55,9 +59,9 @@ spec:
         - name: OZONE_ROOT_LOGGER
           value: "INFO,RFA"
         - name: OZONE_LOGFILE
-          value: ozone-ozone-datanode-dn-2.log
+          value: ozone-ozone-recon-recon.log
   initContainers:
-    - name: wait
+    - name: chmod
       image: alpine
       imagePullPolicy: IfNotPresent
       command: ["/bin/sh", "-c"]
@@ -65,26 +69,6 @@ spec:
         - |
           chmod 777 /var/log/ozone
           chmod 777 /data
-          echo 'waiting for any of scm-[0-2].default.svc.cluster.local be ready'
-          while :; do
-              nslookup scm-0.default.svc.cluster.local
-              if [ $? -eq 0 ]; then break; fi
-              nslookup scm-1.default.svc.cluster.local
-              if [ $? -eq 0 ]; then break; fi
-              nslookup scm-2.default.svc.cluster.local
-              if [ $? -eq 0 ]; then break; fi
-              sleep 5
-          done
-          echo 'waiting for any of scm-[0-2]:9861 (scm datanode port) be ready'
-          while :; do
-              nc -z -v scm-0 9861
-              if [ $? -eq 0 ]; then break; fi
-              nc -z -v scm-1 9861
-              if [ $? -eq 0 ]; then break; fi
-              nc -z -v scm-2 9861
-              if [ $? -eq 0 ]; then break; fi
-              sleep 5
-          done
       volumeMounts:
         - mountPath: /var/log/ozone
           name: ozone-data
@@ -95,7 +79,7 @@ spec:
   volumes:
     - name: ozone-data
       hostPath:
-        path: /volumes/dn
+        path: /volumes/recon
         type: Directory
     - name: keytabs
       configMap:

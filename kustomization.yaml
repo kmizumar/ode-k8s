@@ -12,6 +12,7 @@ resources:
   - datanode/dn-0.yaml
   - datanode/dn-1.yaml
   - datanode/dn-2.yaml
+  - recon/recon.yaml
 configMapGenerator:
   - name: keytabs
     files:
@@ -19,6 +20,8 @@ configMapGenerator:
       - security/SCM.keytab
       - security/OM.keytab
       - security/HDDS.keytab
+      - security/RECON.keytab
+      - security/S3G.keytab
     options:
       disableNameSuffixHash: true
   - name: krb5-script

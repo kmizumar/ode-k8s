@@ -24,6 +24,7 @@ metadata:
     component: dn-0
 spec:
   hostname: dn-0
+  subdomain: dn-0
   setHostnameAsFQDN: true
   nodeSelector:
     kubernetes.io/hostname: ode-dn0
@@ -56,7 +57,7 @@ spec:
         - name: OZONE_LOGFILE
           value: ozone-ozone-datanode-dn-0.log
   initContainers:
-    - name: chmod
+    - name: wait
       image: alpine
       imagePullPolicy: IfNotPresent
       command: ["/bin/sh", "-c"]
@@ -64,6 +65,26 @@ spec:
         - |
           chmod 777 /var/log/ozone
           chmod 777 /data
+          echo 'waiting for any of scm-[0-2].default.svc.cluster.local be ready'
+          while :; do
+              nslookup scm-0.default.svc.cluster.local
+              if [ $? -eq 0 ]; then break; fi
+              nslookup scm-1.default.svc.cluster.local
+              if [ $? -eq 0 ]; then break; fi
+              nslookup scm-2.default.svc.cluster.local
+              if [ $? -eq 0 ]; then break; fi
+              sleep 5
+          done
+          echo 'waiting for any of scm-[0-2]:9861 (scm datanode port) be ready'
+          while :; do
+              nc -z -v scm-0 9861
+              if [ $? -eq 0 ]; then break; fi
+              nc -z -v scm-1 9861
+              if [ $? -eq 0 ]; then break; fi
+              nc -z -v scm-2 9861
+              if [ $? -eq 0 ]; then break; fi
+              sleep 5
+          done
       volumeMounts:
         - mountPath: /var/log/ozone
           name: ozone-data

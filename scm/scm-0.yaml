@@ -37,7 +37,7 @@ metadata:
     component: scm-0
 spec:
   hostname: scm-0
-  setHostnameAsFQDN: true
+  subdomain: scm-0
   nodeSelector:
     kubernetes.io/hostname: ode-scm0
   containers:

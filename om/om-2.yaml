@@ -29,6 +29,7 @@ metadata:
     component: om-2
 spec:
   hostname: om-2
+  subdomain: om-2
   setHostnameAsFQDN: true
   nodeSelector:
     kubernetes.io/hostname: ode-om2
@@ -78,6 +79,16 @@ spec:
                   echo waiting for om-${i}.default.svc.cluster.local
                   sleep 2
               done
+          done
+          echo 'waiting for any of scm-[0-2]:9861 (scm datanode port) be ready'
+          while :; do
+              nc -z -v scm-0 9861
+              if [ $? -eq 0 ]; then break; fi
+              nc -z -v scm-1 9861
+              if [ $? -eq 0 ]; then break; fi
+              nc -z -v scm-2 9861
+              if [ $? -eq 0 ]; then break; fi
+              sleep 5
           done
       volumeMounts:
         - mountPath: /var/log/ozone

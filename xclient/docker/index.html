@@ -1,0 +1,51 @@
+<!doctype html>
+<html>
+<body>
+<h1 style="color: #5e9ca0;">ODE k8s</h1>
+<h2 style="color: #2e6c80;">HTTP Endpoints:</h2>
+<table class="table" style="height: 278px; width: 600px;">
+<tbody>
+<tr style="height: 22px;">
+<td style="height: 22px; width: 150px;">Recon</td>
+<td style="height: 22px; width: 450px;">
+<ul>
+<li><a href="http://recon.recon.default.svc.cluster.local:9888">http://recon.recon.default.svc.cluster.local:9888</a></li>
+</ul>
+</td>
+</tr>
+<tr style="height: 22px;">
+<td style="height: 22px; width: 150px;">SCM</td>
+<td style="height: 22px; width: 450px;">
+<ul>
+<li><a href="http://scm-0.scm-0.default.svc.cluster.local:9876">http://scm-0.scm-0.default.svc.cluster.local:9876</a></li>
+<li><a href="http://scm-1.scm-1.default.svc.cluster.local:9876">http://scm-1.scm-1.default.svc.cluster.local:9876</a></li>
+<li><a href="http://scm-2.scm-2.default.svc.cluster.local:9876">http://scm-2.scm-2.default.svc.cluster.local:9876</a></li>
+</ul>
+</td>
+</tr>
+<tr style="height: 22px;">
+<td style="height: 22px; width: 150px;">OM</td>
+<td style="height: 22px; width: 450px;">
+<ul>
+<li><a href="http://om-0.om-0.default.svc.cluster.local:9874">http://om-0.om-0.default.svc.cluster.local:9874</a></li>
+<li><a href="http://om-1.om-1.default.svc.cluster.local:9874">http://om-1.om-1.default.svc.cluster.local:9874</a></li>
+<li><a href="http://om-2.om-2.default.svc.cluster.local:9874">http://om-2.om-2.default.svc.cluster.local:9874</a></li>
+</ul>
+</td>
+</tr>
+<tr style="height: 22px;">
+<td style="height: 22px; width: 150px;">Datanode</td>
+<td style="height: 22px; width: 450px;">
+<ul>
+<li><a href="http://dn-0.dn-0.default.svc.cluster.local:9882">http://dn-0.dn-0.default.svc.cluster.local:9882</a></li>
+<li><a href="http://dn-1.dn-1.default.svc.cluster.local:9882">http://dn-1.dn-1.default.svc.cluster.local:9882</a></li>
+<li><a href="http://dn-2.dn-2.default.svc.cluster.local:9882">http://dn-2.dn-2.default.svc.cluster.local:9882</a></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 style="color: #2e6c80;">Note:</h2>
+<p>Don't forget to setup SPNEGO in your web browser. <a href="https://docs.cloudera.com/cdp-private-cloud-base/7.1.6/security-how-to-guides/topics/cm-security-browser-access-kerberos-protected-url.html">This page</a> is useful.</p>
+</body>
+</html>

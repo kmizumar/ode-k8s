@@ -12,6 +12,8 @@ spec:
       name: http-address
     - port: 9889
       name: https-address
+    - port: 9891
+      name: datanode
   selector:
     app: ozone
     component: recon
@@ -41,6 +43,8 @@ spec:
           name: http-address
         - containerPort: 9889
           name: https-port
+        - containerPort: 9891
+          name: datanode
       volumeMounts:
         - mountPath: /var/log/ozone
           name: ozone-data

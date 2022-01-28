@@ -1,0 +1,138 @@
+---
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+nodes:
+- role: control-plane
+- role: worker
+  extraMounts:
+  - hostPath: krb5-server/hostpath
+    containerPath: /volumes/krb5-server
+  kubeadmConfigPatches:
+  - |
+    kind: JoinConfiguration
+    nodeRegistration:
+      name: ode-kerberos
+      kubeletExtraArgs:
+        node-labels: "ode/nodetype=kerberos"
+- role: worker
+  extraMounts:
+  - hostPath: recon/hostpath
+    containerPath: /volumes/recon
+  kubeadmConfigPatches:
+  - |
+    kind: JoinConfiguration
+    nodeRegistration:
+      name: ode-recon
+      kubeletExtraArgs:
+        node-labels: "ode/nodetype=recon"
+- role: worker
+  extraMounts:
+  - hostPath: scm/hostpath/scm0
+    containerPath: /volumes/scm
+  kubeadmConfigPatches:
+  - |
+    kind: JoinConfiguration
+    nodeRegistration:
+      name: ode-scm0
+      kubeletExtraArgs:
+        node-labels: "ode/nodetype=scm"
+- role: worker
+  extraMounts:
+  - hostPath: scm/hostpath/scm1
+    containerPath: /volumes/scm
+  kubeadmConfigPatches:
+  - |
+    kind: JoinConfiguration
+    nodeRegistration:
+      name: ode-scm1
+      kubeletExtraArgs:
+        node-labels: "ode/nodetype=scm"
+- role: worker
+  extraMounts:
+  - hostPath: scm/hostpath/scm2
+    containerPath: /volumes/scm
+  kubeadmConfigPatches:
+  - |
+    kind: JoinConfiguration
+    nodeRegistration:
+      name: ode-scm2
+      kubeletExtraArgs:
+        node-labels: "ode/nodetype=scm"
+- role: worker
+  extraMounts:
+  - hostPath: om/hostpath/om0
+    containerPath: /volumes/om
+  kubeadmConfigPatches:
+  - |
+    kind: JoinConfiguration
+    nodeRegistration:
+      name: ode-om0
+      kubeletExtraArgs:
+        node-labels: "ode/nodetype=om"
+- role: worker
+  extraMounts:
+  - hostPath: om/hostpath/om1
+    containerPath: /volumes/om
+  kubeadmConfigPatches:
+  - |
+    kind: JoinConfiguration
+    nodeRegistration:
+      name: ode-om1
+      kubeletExtraArgs:
+        node-labels: "ode/nodetype=om"
+- role: worker
+  extraMounts:
+  - hostPath: om/hostpath/om2
+    containerPath: /volumes/om
+  kubeadmConfigPatches:
+  - |
+    kind: JoinConfiguration
+    nodeRegistration:
+      name: ode-om2
+      kubeletExtraArgs:
+        node-labels: "ode/nodetype=om"
+- role: worker
+  extraMounts:
+  - hostPath: datanode/hostpath/dn0
+    containerPath: /volumes/dn
+  kubeadmConfigPatches:
+  - |
+    kind: JoinConfiguration
+    nodeRegistration:
+      name: ode-dn0
+      kubeletExtraArgs:
+        node-labels: "ode/nodetype=datanode"
+- role: worker
+  extraMounts:
+  - hostPath: datanode/hostpath/dn1
+    containerPath: /volumes/dn
+  kubeadmConfigPatches:
+  - |
+    kind: JoinConfiguration
+    nodeRegistration:
+      name: ode-dn1
+      kubeletExtraArgs:
+        node-labels: "ode/nodetype=datanode"
+- role: worker
+  extraMounts:
+  - hostPath: datanode/hostpath/dn2
+    containerPath: /volumes/dn
+  kubeadmConfigPatches:
+  - |
+    kind: JoinConfiguration
+    nodeRegistration:
+      name: ode-dn2
+      kubeletExtraArgs:
+        node-labels: "ode/nodetype=datanode"
+- role: worker
+  extraMounts:
+  - hostPath: /tmp/.X11-unix
+    containerPath: /tmp/.X11-unix
+  kubeadmConfigPatches:
+  - |
+    kind: JoinConfiguration
+    nodeRegistration:
+      name: ode-xclient
+      kubeletExtraArgs:
+        node-labels: "ode/nodetype=xclient"
+...

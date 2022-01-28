@@ -130,4 +130,16 @@
     <name>ozone.recon.address</name>
     <value>recon.recon.default.svc.cluster.local</value>
   </property>
+  <property>
+    <name>dfs.datanode.kerberos.principal</name>
+    <value>HDDS/_HOST@EXAMPLE.COM</value>
+  </property>
+  <property>
+    <name>hdds.datanode.http.auth.kerberos.principal</name>
+    <value>HTTP/_HOST@EXAMPLE.COM</value>
+  </property>
+  <property>
+    <name>hdds.datanode.http.auth.type</name>
+    <value>kerberos</value>
+  </property>
 </configuration>

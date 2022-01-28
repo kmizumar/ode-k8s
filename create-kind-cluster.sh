@@ -3,7 +3,25 @@ set -euo pipefail
 
 KINDEST_NODE_VERSION=v1.23.1
 
-kind create cluster --config kind-config.yaml --image kindest/node:${KINDEST_NODE_VERSION}
+function usage {
+    printf 'usage: %s [-x|--with-xclient]\n' ${0##*/} >&2
+    exit 1
+}
+
+VARIANT=''
+while (( $# > 0 )); do
+    case $1 in
+        -x|--with-xclient)
+            VARIANT="-xclient"
+        ;;
+        *)
+            usage
+        ;;
+    esac
+    shift
+done
+
+kind create cluster --config kind-config${VARIANT}.yaml --image kindest/node:${KINDEST_NODE_VERSION}
 
 # needs to add `endpoint_pod_names` to CoreDNS ConfigMap:
 #

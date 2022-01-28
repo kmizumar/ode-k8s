@@ -1,0 +1,30 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: xclient
+  labels:
+    app: ozone
+    component: xclient
+spec:
+  hostname: xclient
+  nodeSelector:
+    kubernetes.io/hostname: ode-xclient
+  containers:
+    - name: xclient
+      image: pfnmaru/ode-xclient
+      imagePullPolicy: IfNotPresent
+      volumeMounts:
+        - mountPath: /tmp/.X11-unix
+          name: x11-socket
+      env:
+        - name: DISPLAY
+          valueFrom:
+            configMapKeyRef:
+              name: xclient
+              key: envvar-display
+  volumes:
+    - name: x11-socket
+      hostPath:
+        path: /tmp/.X11-unix
+...

@@ -22,7 +22,7 @@ spec:
           valueFrom:
             configMapKeyRef:
               name: xclient
-              key: env-value-display
+              key: envvar-display
   volumes:
     - name: x11-socket
       hostPath:

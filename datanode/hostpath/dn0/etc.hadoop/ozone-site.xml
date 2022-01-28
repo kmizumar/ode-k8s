@@ -94,4 +94,28 @@
     <name>hdds.datanode.http.auth.type</name>
     <value>kerberos</value>
   </property>
+  <property>
+    <name>ozone.recon.kerberos.keytab.file</name>
+    <value>/etc/security/keytabs/RECON.keytab</value>
+  </property>
+  <property>
+    <name>ozone.recon.http.auth.kerberos.keytab</name>
+    <value>/etc/security/keytabs/HTTP.keytab</value>
+  </property>
+  <property>
+    <name>ozone.recon.kerberos.principal</name>
+    <value>RECON/_HOST@EXAMPLE.COM</value>
+  </property>
+  <property>
+    <name>ozone.recon.http.auth.kerberos.principal</name>
+    <value>HTTP/_HOST@EXAMPLE.COM</value>
+  </property>
+  <property>
+    <name>ozone.recon.http.auth.type</name>
+    <value>kerberos</value>
+  </property>
+  <property>
+    <name>ozone.recon.address</name>
+    <value>recon.recon.default.svc.cluster.local</value>
+  </property>
 </configuration>

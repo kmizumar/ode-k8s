@@ -1,0 +1,146 @@
+---
+- name: set certificate task vars
+  ansible.builtin.set_fact:
+    self_signed_ca_host: '{{ self_signed_ca_host | default(False) }}'
+    local_dir: ./security
+
+- name: setup server certificates (controller)
+  block:
+
+  - name: create local directory for security files
+    ansible.builtin.file:
+      path: '{{ local_dir }}'
+      state: directory
+      mode: '0750'
+    delegate_to: localhost
+
+  - name: generate private key for root CA
+    community.crypto.openssl_privatekey:
+      path: '{{ local_dir }}/CA.key'
+      passphrase: '{{ secret.privatekey.passphrase }}'
+      cipher: auto
+      mode: '0400'
+    delegate_to: localhost
+
+  - name: generate csr for CA certificate
+    community.crypto.openssl_csr_pipe:
+      privatekey_path: '{{ local_dir }}/CA.key'
+      privatekey_passphrase: '{{ secret.privatekey.passphrase }}'
+      common_name: '{{ self_signed_rootca_name }}'
+      use_common_name_for_san: false  # since we don't specify SANs, don't use CN as a SAN
+      basic_constraints_critical: true
+      basic_constraints:
+        - CA:TRUE
+        - pathlen:0
+      key_usage:
+        - digitalSignature
+        - cRLSign
+        - keyCertSign
+      key_usage_critical: true
+    register: ca_csr
+    delegate_to: localhost
+
+  - name: generate self-signed root CA certificate
+    community.crypto.x509_certificate:
+      path: '{{ local_dir }}/CA.cert'
+      csr_content: '{{ ca_csr.csr }}'
+      privatekey_path: '{{ local_dir }}/CA.key'
+      privatekey_passphrase: '{{ secret.privatekey.passphrase }}'
+      provider: selfsigned
+      mode: '0644'
+    delegate_to: localhost
+
+  - name: generate private keys for server certificates
+    community.crypto.openssl_privatekey:
+      path: '{{ local_dir }}/{{ item }}.key'
+      passphrase: '{{ secret.privatekey.passphrase }}'
+      cipher: auto
+      mode: '0400'
+    loop: '{{ self_signed_domain }}'
+    delegate_to: localhost
+
+  - name: generate csrs for server certificates
+    community.crypto.openssl_csr:
+      path: '{{ local_dir }}/{{ item }}.csr'
+      privatekey_path: '{{ local_dir }}/{{ item }}.key'
+      privatekey_passphrase: '{{ secret.privatekey.passphrase }}'
+      common_name: '{{ item }}'
+      extended_key_usage:
+        - clientAuth
+        - serverAuth
+      mode: '0644'
+    loop: '{{ self_signed_domain }}'
+    delegate_to: localhost
+
+  - name: generate server certificates
+    community.crypto.x509_certificate:
+      path: '{{ local_dir }}/{{ item }}.cert'
+      csr_path: '{{ local_dir }}/{{ item }}.csr'
+      ownca_path: '{{ local_dir }}/CA.cert'
+      ownca_privatekey_path: '{{ local_dir }}/CA.key'
+      ownca_privatekey_passphrase: '{{ secret.privatekey.passphrase }}'
+      provider: ownca
+      mode: '0644'
+    loop: '{{ self_signed_domain }}'
+    delegate_to: localhost
+
+  become: no
+  when: self_signed_ca_host and self_signed_domain is defined
+
+# - name: setup server certificates (target)
+#   block:
+
+#   - name: create directory for root CA
+#     ansible.builtin.file:
+#       path: '{{ self_signed_rootca_path }}'
+#       state: directory
+#       owner: root
+#       group: root
+#       mode: '0750'
+
+#   - name: upload root CA key
+#     ansible.builtin.copy:
+#       src: '{{ local_dir }}/CA.key'
+#       dest: '{{ self_signed_rootca_path }}/CA.key'
+#       owner: root
+#       group: root
+#       mode: '0400'
+#     when: self_signed_ca_host
+
+#   - name: upload root CA certificate
+#     ansible.builtin.copy:
+#       src: '{{ local_dir }}/CA.cert'
+#       dest: '{{ self_signed_rootca_path }}/CA.cert'
+#       owner: root
+#       group: root
+#       mode: '0644'
+
+#   - name: create directory for storing keys and certificates
+#     ansible.builtin.file:
+#       path: '{{ self_signed_cert_path }}'
+#       state: directory
+#       owner: root
+#       group: root
+#       mode: '0755'
+
+#   - name: upload server certificates
+#     ansible.builtin.copy:
+#       src: '{{ local_dir }}/{{ item.src }}'
+#       dest: '{{ self_signed_cert_path }}/{{ item.dest }}'
+#       owner: root
+#       group: root
+#       mode: '{{ item.mode }}'
+#     loop:
+#       - { 'src': '{{ ansible_fqdn }}.key', 'dest': '{{ ansible_fqdn }}.key', 'mode': '0400' }
+#       - { 'src': '{{ ansible_fqdn }}.cert', 'dest': '{{ ansible_fqdn }}.cert', 'mode': '0644' }
+
+#   - name: create server certificate links
+#     ansible.builtin.file:
+#       src: '{{ self_signed_cert_path }}/{{ ansible_fqdn }}.cert'
+#       dest: '{{ self_signed_cert_path }}/server.cert'
+#       owner: root
+#       group: root
+#       state: link
+
+#   when: self_signed_domain is defined
+...

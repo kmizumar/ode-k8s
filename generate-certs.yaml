@@ -1,0 +1,24 @@
+---
+- hosts: localhost
+  vars:
+    ansible_connection: local
+    self_signed_rootca_name: 'Fake CA'
+    self_signed_ca_host: root-ca.example.com
+    self_signed_domain:
+      - scm-0.scm-0.default.svc.cluster.local
+      - scm-1.scm-1.default.svc.cluster.local
+      - scm-2.scm-2.default.svc.cluster.local
+      - om-0.om-0.default.svc.cluster.local
+      - om-1.om-1.default.svc.cluster.local
+      - om-2.om-2.default.svc.cluster.local
+      - dn-0.dn-0.default.svc.cluster.local
+      - dn-1.dn-1.default.svc.cluster.local
+      - dn-2.dn-2.default.svc.cluster.local
+      - recon.recon.default.svc.cluster.local
+    secret:
+      privatekey:
+        passphrase: changeit
+  roles:
+    - self_signed_certificate
+  become: no
+...

@@ -10,8 +10,6 @@ COPY --chown=ozone:users entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get -yq --no-install-recommends install \
     krb5-user \
-    libpam-krb5 \
-    libpam-ccreds \
     openjdk-11-jdk-headless \
     iputils-ping \
     net-tools \

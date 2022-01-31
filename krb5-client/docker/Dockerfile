@@ -3,8 +3,6 @@ FROM ubuntu:20.04
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get -yq --no-install-recommends install \
     krb5-user \
-    libpam-krb5 \
-    libpam-ccreds \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/*
 

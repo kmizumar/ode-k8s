@@ -1,0 +1,24 @@
+---
+- name: set certificate task vars
+  ansible.builtin.set_fact:
+    self_signed_ca_host: '{{ self_signed_ca_host | default(False) }}'
+    local_dir: ./security
+
+- name: copy certificate
+  ansible.builtin.copy:
+    src: '{{ local_dir }}/{{ item.fqdn }}.cert'
+    dest: '{{ item.dest }}/{{ item.fqdn }}.cert'
+    mode: '0644'
+  delegate_to: localhost
+  loop:
+    '{{ certs_deploy }}'
+
+- name: create a link to the certificate
+  ansible.builtin.file:
+    src: '{{ item.fqdn }}.cert'
+    dest: '{{ item.dest }}/server.cert'
+    state: link
+  delegate_to: localhost
+  loop:
+    '{{ certs_deploy }}'
+...

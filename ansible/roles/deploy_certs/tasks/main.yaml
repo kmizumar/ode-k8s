@@ -21,4 +21,26 @@
   delegate_to: localhost
   loop:
     '{{ certs_deploy }}'
+
+- name: copy truststore
+  ansible.builtin.copy:
+    src: '{{ local_dir }}/jssecacerts'
+    dest: '{{ item.dest }}/jssecacerts'
+    mode: '0644'
+  delegate_to: localhost
+  loop:
+    '{{ certs_deploy }}'
+
+- name: create a keystore
+  community.general.java_keystore:
+    name: '{{ item.fqdn }}'
+    dest: '{{ item.dest }}/server.jks'
+    certificate_path: '{{ local_dir }}/{{ item.fqdn }}.cert'
+    private_key_path: '{{ local_dir }}/{{ item.fqdn }}.key'
+    private_key_passphrase: '{{ secret.privatekey.passphrase }}'
+    password: '{{ secret.keystore.pass }}'
+    keystore_type: jks
+  delegate_to: localhost
+  loop:
+    '{{ certs_deploy }}'
 ...

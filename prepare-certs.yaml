@@ -18,13 +18,15 @@
     secret:
       privatekey:
         passphrase: changeit
+      keystore:
+        pass: changeit
     certs_deploy:
       - fqdn: scm-0.scm-0.default.svc.cluster.local
         dest: scm/hostpath/scm0/localcerts
       - fqdn: scm-1.scm-1.default.svc.cluster.local
         dest: scm/hostpath/scm1/localcerts
       - fqdn: scm-2.scm-2.default.svc.cluster.local
-        dest: scm/hostpath/scm1/localcerts
+        dest: scm/hostpath/scm2/localcerts
       - fqdn: om-0.om-0.default.svc.cluster.local
         dest: om/hostpath/om0/localcerts
       - fqdn: om-1.om-1.default.svc.cluster.local
@@ -43,6 +45,9 @@
     - role: self_signed_certificate
       tags:
         - generate
+    - role: java_certs
+      tags:
+        - deploy
     - role: deploy_certs
       tags:
         - deploy

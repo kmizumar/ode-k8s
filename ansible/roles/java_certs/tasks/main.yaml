@@ -1,0 +1,41 @@
+---
+- name: set certificate task vars
+  ansible.builtin.set_fact:
+    self_signed_ca_host: '{{ self_signed_ca_host | default(False) }}'
+    local_dir: ./security
+
+- name: check cacerts existence
+  ansible.builtin.stat:
+    path: '{{ local_dir }}/cacerts'
+  delegate_to: localhost
+  register: cacerts_file
+
+- name: check jssecacerts existence
+  ansible.builtin.stat:
+    path: '{{ local_dir }}/jssecacerts'
+  delegate_to: localhost
+  register: jssecacerts_file
+
+- name: setup jssecacerts
+  block:
+
+  - name: copy cacerts to jssecacerts
+    ansible.builtin.copy:
+      src: '{{ local_dir }}/cacerts'
+      dest: '{{ local_dir }}/jssecacerts'
+      mode: '0644'
+    delegate_to: localhost
+    when: not jssecacerts_file.stat.exists
+
+  - name: import root CA certificate
+    community.general.java_cert:
+      cert_path: '{{ local_dir }}/CA.cert'
+      keystore_path: '{{ local_dir }}/jssecacerts'
+      keystore_pass: '{{ secret.keystore.pass }}'
+      keystore_create: no
+      state: present
+      cert_alias: '{{ self_signed_rootca_name }}'
+      trust_cacert: yes
+
+  when: cacerts_file is defined and cacerts_file.stat.exists and jssecacerts_file is defined
+...

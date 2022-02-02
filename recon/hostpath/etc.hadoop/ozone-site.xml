@@ -142,4 +142,20 @@
     <name>hdds.datanode.http.auth.type</name>
     <value>kerberos</value>
   </property>
+  <property>
+    <name>ozone.http.policy</name>
+    <value>HTTPS_ONLY</value>
+  </property>
+  <property>
+    <name>ozone.https.client.need-auth</name>
+    <value>false</value>
+  </property>
+  <property>
+    <name>ozone.https.client.keystore.resource</name>
+    <value>ssl-client.xml</value>
+  </property>
+  <property>
+    <name>ozone.https.server.keystore.resource</name>
+    <value>ssl-server.xml</value>
+  </property>
 </configuration>

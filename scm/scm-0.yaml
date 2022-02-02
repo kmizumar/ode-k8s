@@ -38,6 +38,7 @@ metadata:
 spec:
   hostname: scm-0
   subdomain: scm-0
+  setHostnameAsFQDN: true
   nodeSelector:
     kubernetes.io/hostname: ode-scm0
   containers:
@@ -73,6 +74,9 @@ spec:
           subPath: data
         - mountPath: /etc/security/keytabs
           name: keytabs
+        - mountPath: /etc/ssl/localcerts
+          name: ozone-data
+          subPath: localcerts
       env:
         - name: OZONE_LOG_DIR
           value: /var/log/ozone
@@ -135,6 +139,9 @@ spec:
           name: scm-script
         - mountPath: /etc/security/keytabs
           name: keytabs
+        - mountPath: /etc/ssl/localcerts
+          name: ozone-data
+          subPath: localcerts
       env:
         - name: OZONE_LOG_DIR
           value: /var/log/ozone

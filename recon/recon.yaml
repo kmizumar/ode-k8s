@@ -57,6 +57,9 @@ spec:
           subPath: data
         - mountPath: /etc/security/keytabs
           name: keytabs
+        - mountPath: /etc/ssl/localcerts
+          name: ozone-data
+          subPath: localcerts
       env:
         - name: OZONE_LOG_DIR
           value: /var/log/ozone

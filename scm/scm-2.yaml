@@ -17,6 +17,10 @@ spec:
       name: block-client
     - port: 9876
       name: http-address
+    - port: 9877
+      name: https-address
+    - port: 9893
+      name: update-service
     - port: 9894
       name: ratis
     - port: 9895
@@ -56,6 +60,10 @@ spec:
           name: block-client
         - containerPort: 9876
           name: http-address
+        - containerPort: 9877
+          name: https-address
+        - containerPort: 9893
+          name: update-service
         - containerPort: 9894
           name: ratis
         - containerPort: 9895
@@ -127,6 +135,10 @@ spec:
           name: block-client
         - containerPort: 9876
           name: http-address
+        - containerPort: 9877
+          name: https-address
+        - containerPort: 9893
+          name: update-service
         - containerPort: 9894
           name: ratis
         - containerPort: 9895

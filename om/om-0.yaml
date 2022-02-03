@@ -15,6 +15,8 @@ spec:
       name: ratis
     - port: 9874
       name: http-address
+    - port: 9875
+      name: https-address
   selector:
     app: ozone
     component: om-0
@@ -46,6 +48,8 @@ spec:
           name: ratis
         - containerPort: 9874
           name: http-address
+        - containerPort: 9875
+          name: https-address
       volumeMounts:
         - mountPath: /var/log/ozone
           name: ozone-data
@@ -111,6 +115,8 @@ spec:
           name: ratis
         - containerPort: 9874
           name: http-address
+        - containerPort: 9875
+          name: https-address
       volumeMounts:
         - mountPath: /var/log/ozone
           name: ozone-data

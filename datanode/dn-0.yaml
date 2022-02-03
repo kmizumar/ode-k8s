@@ -9,8 +9,18 @@ metadata:
 spec:
   clusterIP: None
   ports:
-    - port: 6666
-      name: foo
+    - port: 9856
+      name: ratis-server
+    - port: 9857
+      name: ratis-admin
+    - port: 9858
+      name: ratis-ipc
+    - port: 9859
+      name: container-ipc
+    - port: 9882
+      name: http-address
+    - port: 9883
+      name: https-address
   selector:
     app: ozone
     component: dn-0
@@ -35,8 +45,18 @@ spec:
       args:
         ["ozone", "datanode"]
       ports:
-        - containerPort: 6666
-          name: foo
+        - containerPort: 9856
+          name: ratis-server
+        - containerPort: 9857
+          name: ratis-admin
+        - containerPort: 9858
+          name: ratis-ipc
+        - containerPort: 9859
+          name: container-ipc
+        - containerPort: 9882
+          name: http-address
+        - containerPort: 9883
+          name: https-address
       volumeMounts:
         - mountPath: /var/log/ozone
           name: ozone-data

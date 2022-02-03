@@ -99,6 +99,14 @@ spec:
                   sleep 2
               done
           done
+          echo 'waiting for MIT KDC be ready'
+          while :; do
+              nc -z -v ode-kerberos 88
+              if [ $? -eq 0 ]; then break; fi
+              nc -z -v ode-kerberos 750
+              if [ $? -eq 0 ]; then break; fi
+              sleep 5
+          done
       volumeMounts:
         - mountPath: /var/log/ozone
           name: ozone-data

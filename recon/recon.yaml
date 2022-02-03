@@ -68,7 +68,7 @@ spec:
         - name: OZONE_LOGFILE
           value: ozone-ozone-recon-recon.log
   initContainers:
-    - name: chmod
+    - name: wait
       image: alpine
       imagePullPolicy: IfNotPresent
       command: ["/bin/sh", "-c"]
@@ -76,6 +76,18 @@ spec:
         - |
           chmod 777 /var/log/ozone
           chmod 777 /data
+          until nslookup recon.default.svc.cluster.local; do
+              echo 'waiting for recon.default.svc.cluster.local'
+              sleep 2
+          done
+          echo 'waiting for MIT KDC be ready'
+          while :; do
+              nc -z -v ode-kerberos 88
+              if [ $? -eq 0 ]; then break; fi
+              nc -z -v ode-kerberos 750
+              if [ $? -eq 0 ]; then break; fi
+              sleep 5
+          done
       volumeMounts:
         - mountPath: /var/log/ozone
           name: ozone-data

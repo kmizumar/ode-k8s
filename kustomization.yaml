@@ -13,6 +13,7 @@ resources:
   - datanode/dn-1.yaml
   - datanode/dn-2.yaml
   - recon/recon.yaml
+  - s3gateway/s3g.yaml
 configMapGenerator:
   - name: keytabs
     files:

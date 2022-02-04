@@ -126,6 +126,17 @@ nodes:
         node-labels: "ode/nodetype=datanode"
 - role: worker
   extraMounts:
+  - hostPath: s3gateway/hostpath
+    containerPath: /volumes/s3gateway
+  kubeadmConfigPatches:
+  - |
+    kind: JoinConfiguration
+    nodeRegistration:
+      name: ode-s3g
+      kubeletExtraArgs:
+        node-labels: "ode/nodetype=s3gateway"
+- role: worker
+  extraMounts:
   - hostPath: /tmp/.X11-unix
     containerPath: /tmp/.X11-unix
   kubeadmConfigPatches:

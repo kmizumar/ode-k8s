@@ -15,6 +15,7 @@
       - dn-1.dn-1.default.svc.cluster.local
       - dn-2.dn-2.default.svc.cluster.local
       - recon.recon.default.svc.cluster.local
+      - s3g.s3g.default.svc.cluster.local
     secret:
       privatekey:
         passphrase: changeit
@@ -41,6 +42,8 @@
         dest: datanode/hostpath/dn2/localcerts
       - fqdn: recon.recon.default.svc.cluster.local
         dest: recon/hostpath/localcerts
+      - fqdn: s3g.s3g.default.svc.cluster.local
+        dest: s3gateway/hostpath/localcerts
   roles:
     - role: self_signed_certificate
       tags:

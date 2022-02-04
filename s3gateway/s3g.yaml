@@ -1,0 +1,95 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: s3g
+  labels:
+    app: ozone
+    component: s3g
+spec:
+  ports:
+    - port: 9878
+      name: http-address
+    - port: 9879
+      name: https-address
+  selector:
+    app: ozone
+    component: s3g
+  publishNotReadyAddresses: true
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: s3g
+  labels:
+    app: ozone
+    component: s3g
+spec:
+  hostname: s3g
+  subdomain: s3g
+  setHostnameAsFQDN: true
+  nodeSelector:
+    kubernetes.io/hostname: ode-s3g
+  containers:
+    - name: s3g
+      image: pfnmaru/ozone-runner
+      imagePullPolicy: IfNotPresent
+      args:
+        ["ozone", "s3g"]
+      ports:
+        - containerPort: 9878
+          name: http-address
+        - containerPort: 9879
+          name: https-port
+      volumeMounts:
+        - mountPath: /var/log/ozone
+          name: ozone-data
+          subPath: log.ozone
+        - mountPath: /opt/ozone/etc/hadoop
+          name: ozone-data
+          subPath: etc.hadoop
+        - mountPath: /etc/security/keytabs
+          name: keytabs
+        - mountPath: /etc/ssl/localcerts
+          name: ozone-data
+          subPath: localcerts
+      env:
+        - name: OZONE_LOG_DIR
+          value: /var/log/ozone
+        - name: OZONE_ROOT_LOGGER
+          value: "INFO,RFA"
+        - name: OZONE_LOGFILE
+          value: ozone-ozone-s3g-s3g.log
+  initContainers:
+    - name: wait
+      image: alpine
+      imagePullPolicy: IfNotPresent
+      command: ["/bin/sh", "-c"]
+      args:
+        - |
+          chmod 777 /var/log/ozone
+          until nslookup s3g.default.svc.cluster.local; do
+              echo 'waiting for s3g.default.svc.cluster.local'
+              sleep 2
+          done
+          echo 'waiting for MIT KDC be ready'
+          while :; do
+              nc -z -v ode-kerberos 88
+              if [ $? -eq 0 ]; then break; fi
+              nc -z -v ode-kerberos 750
+              if [ $? -eq 0 ]; then break; fi
+              sleep 5
+          done
+      volumeMounts:
+        - mountPath: /var/log/ozone
+          name: ozone-data
+          subPath: log.ozone
+  volumes:
+    - name: ozone-data
+      hostPath:
+        path: /volumes/s3gateway
+        type: Directory
+    - name: keytabs
+      configMap:
+        name: keytabs
+...

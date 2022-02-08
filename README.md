@@ -598,7 +598,60 @@ A warning message comes that there is a security concern because we are using a 
 
 ![firefox-warning](https://github.com/kmizumar/ode-k8s/blob/images/firefox-warning.png?raw=true)
 
-We can access the WebUI of Recon and SCM/OM/Datanode.
+We can access the WebUI of Recon, SCM, OM and Datanode.
 
 ![ode-k8s-recon](https://github.com/kmizumar/ode-k8s/blob/images/ode-k8s-recon.png?raw=true)
 
+
+How to stop ode-k8s
+===
+
+Stopping ode-k8s is the same as erasing the object with normal k8s:
+
+```shell
+❯ k kustomize | k delete -f -                                                                                                                            ✘ 255 
+configmap "keytabs" deleted
+configmap "krb5-script" deleted
+configmap "om-script" deleted
+configmap "scm-script" deleted
+service "dn-0" deleted
+service "dn-1" deleted
+service "dn-2" deleted
+service "ode-kerberos" deleted
+service "om-0" deleted
+service "om-1" deleted
+service "om-2" deleted
+service "recon" deleted
+service "s3g" deleted
+service "scm-0" deleted
+service "scm-1" deleted
+service "scm-2" deleted
+deployment.apps "krb5-server" deleted
+pod "dn-0" deleted
+pod "dn-1" deleted
+pod "dn-2" deleted
+pod "om-0" deleted
+pod "om-1" deleted
+pod "om-2" deleted
+pod "recon" deleted
+pod "s3g" deleted
+pod "scm-0" deleted
+pod "scm-1" deleted
+pod "scm-2" deleted
+```
+
+The xclient pod is not included in the `kusbomization.yaml`, so please delete it separately.
+
+```shell
+❯ k delete -f xclient/
+configmap "xclient" deleted
+pod "xclient" deleted
+```
+
+The method to delete a KinD cluster is the same as usual.
+If you changed the cluster name, please specify the target cluster name.
+
+```shell
+❯ kind delete cluster --name kind                                                                                                                          ✘ 1 
+Deleting cluster "kind" ...
+```

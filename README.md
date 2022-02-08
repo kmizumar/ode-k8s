@@ -470,7 +470,7 @@ Add a line to the `/etc/hosts` file so that the FQDN of the S3 Gateway node poin
 (snip)
 
 # ode-k8s
-127.0.0.1 s3g.s3g.default.svc.cluster.loca
+127.0.0.1 s3g.s3g.default.svc.cluster.local
 ```
 
 Open another terminal and run `port-forward` to port 9879 of s3g pod.

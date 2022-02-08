@@ -499,3 +499,106 @@ SSL validation failed for https://localhost:9879/test-bucket?list-type=2&prefix=
 Access to WebUI
 ---
 
+We want access to Recon and other WebUIs from outside ode-k8s,
+but it is troublesome to make the client-side join the same Kerberos REALM to get tickets and resolve node names.
+To avoid dealing with these issues,
+I decided to run the web browser in the same network as ode-k8s and display the screen on the X Display Server at hand.
+
+First, check to see if the DISPLAY environment variable is set.
+
+```shell
+❯ echo $DISPLAY
+:0
+```
+
+Continue to start the xclient pod.
+
+```shell
+❯ k apply -f xclient/
+configmap/xclient created
+pod/xclient created
+```
+
+Once you've confirmed that the pod is READY
+
+```shell
+❯ k get po/xclient
+NAME      READY   STATUS    RESTARTS   AGE
+xclient   1/1     Running   0          110s
+```
+
+Access pod with kubectl exec and prepare for SPNEGO
+
+```shell
+❯ k exec -it po/xclient -- bash
+maru@xclient:~$ kinit kmizumar@EXAMPLE.COM
+Password for kmizumar@EXAMPLE.COM:
+maru@xclient:~$ klist -fae
+Ticket cache: FILE:/tmp/krb5cc_1000
+Default principal: kmizumar@EXAMPLE.COM
+
+Valid starting     Expires            Service principal
+02/07/22 10:15:32  02/14/22 10:15:30  krbtgt/EXAMPLE.COM@EXAMPLE.COM
+	renew until 03/07/22 10:15:30, Flags: FRIA
+	Etype (skey, tkt): aes256-cts-hmac-sha1-96, aes256-cts-hmac-sha1-96
+	Addresses: (none)
+maru@xclient:~$
+```
+
+Launch firefox
+
+```shell
+maru@xclient:~$ firefox
+Gtk-Message: 10:16:47.394: Failed to load module "canberra-gtk-module"
+Gtk-Message: 10:16:47.395: Failed to load module "canberra-gtk-module"
+[GFX1-]: glxtest: libpci missing
+[GFX1-]: glxtest: libEGL missing
+[GFX1-]: glxtest: libGL.so.1 missing
+[GFX1-]: glxtest: libEGL missing
+[GFX1-]: No GPUs detected via PCI
+```
+
+I've set up the page we want to access first, but I think this screen shows up.
+If anyone knows how to fix this, please let me know.
+
+![firefox-welcome](https://github.com/kmizumar/ode-k8s/blob/images/firefox-welcome.png?raw=true)
+
+Since we have no use for this page, click the X button on the browser to close it.
+Note that if you stop by hitting ^C, it seems to stay in the same state.
+It seems to be OK when we see the following message.
+
+```shell
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Parent][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+maru@xclient:~$
+```
+
+Launch firefox again.
+
+```shell
+maru@xclient:~$ firefox
+Gtk-Message: 10:22:14.709: Failed to load module "canberra-gtk-module"
+Gtk-Message: 10:22:14.710: Failed to load module "canberra-gtk-module"
+[GFX1-]: glxtest: libpci missing
+[GFX1-]: glxtest: libEGL missing
+[GFX1-]: glxtest: libGL.so.1 missing
+[GFX1-]: glxtest: libEGL missing
+[GFX1-]: No GPUs detected via PCI
+```
+
+If you see a screen like this, you have succeeded.
+
+![ode-k8s-endpoints](https://github.com/kmizumar/ode-k8s/blob/images/ode-k8s-endpoints.png?raw=true)
+
+Since ode-k8s is set to HTTPS_ONLY, select a destination to access from HTTPS Endpoints.
+A warning message comes that there is a security concern because we are using a self-signed certificate, but ignore it and proceed.
+
+![firefox-warning](https://github.com/kmizumar/ode-k8s/blob/images/firefox-warning.png?raw=true)
+
+We can access the WebUI of Recon and SCM/OM/Datanode.
+
+![ode-k8s-recon](https://github.com/kmizumar/ode-k8s/blob/images/ode-k8s-recon.png?raw=true)
+

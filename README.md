@@ -4,14 +4,14 @@ ode-k8s
 ode-k8s is intended to be an Ozone Develop Environment on Kubernetes.
 Its purpose is to create a working environment for Apache Ozone on Kubernetes 
 (hereafter referred to as k8s, as usual) for development purposes.
-Its is intended for development purposes, 
+It is intended for development purposes,
 so please DO NOT even think of using it for production.
 I won't go into details, 
-but there is a serious impedance mismatch between the security mechanisms currently employed by Apache Ozone and
+but there is a severe impedance mismatch between the security mechanisms currently employed by Apache Ozone and
 container orchestration systems such as k8s,
 so deploying Apache Ozone on k8s for enterprise use seems impractical.
 
-The purpose of ode-k8s to implement the following for development work towards
+The purpose of ode-k8s is to implement the following for development work towards
 enterprise use of Apache Ozone
 
 - run SCM in High Availability mode
@@ -21,10 +21,10 @@ enterprise use of Apache Ozone
 - eliminate HTTP (unencrypted communication)
 
 If you are not interested in the above items,
-ode-k8s is something you don't need to care of.
-You can find samples for k8s under the `kubernetes`directory of the Apache Ozone release
-distributed by  the Apache Software Foundation (hereafter referred to as ASF),
-and also find the [Ozone on Kubernetes](https://ci-hadoop.apache.org/view/Hadoop%20Ozone/job/ozone-doc-master/lastSuccessfulBuild/artifact/hadoop-hdds/docs/public/start/kubernetes.html)
+ode-k8s is something you don't need to care about.
+You can find samples for k8s under the `kubernetes` directory of the Apache Ozone release
+distributed by  the Apache Software Foundation (hereafter referred to as ASF)
+and find the [Ozone on Kubernetes](https://ci-hadoop.apache.org/view/Hadoop%20Ozone/job/ozone-doc-master/lastSuccessfulBuild/artifact/hadoop-hdds/docs/public/start/kubernetes.html)
 section on the official documentation. 
 
 
@@ -70,7 +70,7 @@ What we need is a docker image with our custom build binary files.
 [INFO] ------------------------------------------------------------------------
 ```
 
-The custom docker image name (`pfnmaru/ozone:1.3.0-SNAPSHOT` in this example) will be used the next step.
+The custom docker image name (`pfnmaru/ozone:1.3.0-SNAPSHOT` in this example) will be used in the next step.
 
 Build docker images you want to run in ode-k8s
 ---
@@ -111,7 +111,7 @@ ENTRYPOINT [ "/usr/bin/dumb-init", "--" ]
 CMD [ "bash", "-c", "/usr/local/bin/entrypoint.sh" ]
 ```
 
-In order to change the docker image name which runs in ode-k8s, 
+To change the docker image name, which runs in ode-k8s,
 please edit the last line of `ozone-docker/build.sh` script accordingly.
 
 ```shell
@@ -147,7 +147,7 @@ Create a KinD cluster
 ---
 
 Use the `create-kind-cluster.sh` script to create a KinD cluster.
-If you are using X Window System and are able to send the output screen of the browser to the display,
+If you are using X Window System and can send the output screen of the browser to the display,
 you can start an additional worker node for xclient by specifying the `--with-xclient` option.
 
 ```shell
@@ -169,7 +169,7 @@ Not sure what to do next? 😅  Check out https://kind.sigs.k8s.io/docs/user/qui
 configmap/coredns patched
 ```
 
-The node objects would be created as show below when succeeded.
+The node objects would be created as shown below when succeeded.
 
 ```shell
 ❯ k get nodes

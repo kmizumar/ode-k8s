@@ -438,3 +438,64 @@ c948283b-db42-4899-873a-260e60355565/RATIS/THREE/RATIS/ALLOCATED/Follower
 b99fcbdf-9a71-4b7d-8bd5-2af1271592d0/RATIS/THREE/RATIS/ALLOCATED/Follower
 ```
 
+Access to S3 Gateway
+---
+
+The S3 Gateway is listening on port 9879 of the s3g pod.
+Execute the `ozone s3 getsecret` command while `kinit` with the UPN of the user you want to access.
+Specifying the `-e` option is convenient since the output will be in a format that can be used for setting environment variables.
+
+```shell
+❯ k exec -it po/om-0 -c om -- bash
+ozone@om-0:/$ kinit kmizumar@EXAMPLE.COM
+Password for kmizumar@EXAMPLE.COM:
+ozone@om-0:/$ ozone s3 getsecret -e --om-service-id=omservice
+export AWS_ACCESS_KEY_ID=kmizumar@EXAMPLE.COM
+export AWS_SECRET_ACCESS_KEY=6d6ed47bd70a5ec144ba2d5c41e03586ba106d46e4b685feaff69939566e57e1
+ozone@om-0:/$
+```
+
+In addition to `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`,
+set `AWS_CA_BUNDLE` environment variable to accept a self-signed Certificate Authority certificate.
+Change the path to the `ode-k8s/security/` directory as needed.
+
+```shell
+export AWS_CA_BUNDLE=/home/maru/IdeaProjects/ode-k8s/security/CA.cert
+```
+
+Add a line to the `/etc/hosts` file so that the FQDN of the S3 Gateway node points to 127.0.0.1.
+
+```shell
+127.0.0.1 localhost
+(snip)
+
+# ode-k8s
+127.0.0.1 s3g.s3g.default.svc.cluster.loca
+```
+
+Open another terminal and run `port-forward` to port 9879 of s3g pod.
+
+```shell
+❯ k port-forward s3g 9879:9879
+Forwarding from 127.0.0.1:9879 -> 9879
+Forwarding from [::1]:9879 -> 9879
+```
+
+Access through the S3 protocol is available by specifying the endpoint appropriately.
+
+```shell
+❯ aws s3 ls --endpoint-url https://s3g.s3g.default.svc.cluster.local:9879 s3://test-bucket/
+2022-02-04 14:37:17        360 ansible.cfg
+```
+
+Please note that access with the endpoint `http://localhost:9879` will be rejected by SSL validation.
+
+```shell
+❯ aws s3 ls --endpoint-url https://localhost:9879 s3://test-bucket/
+
+SSL validation failed for https://localhost:9879/test-bucket?list-type=2&prefix=&delimiter=%2F&encoding-type=url ("hostname 'localhost' doesn't match 's3g.s3g.default.svc.cluster.local'",)
+```
+
+Access to WebUI
+---
+

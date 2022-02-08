@@ -359,3 +359,36 @@ If they are in this state, you can expect them to be working correctly.
 How to use ode-k8s
 ===
 
+ode-k8s is a regular Apache Ozone cluster running on k8s, so the basics are the same.
+To pass the service role authentication method used by Apache Ozone (originating from Apache Hadoop),
+ode-k8s have one fixed pod per node, which allows resolution by FQDN.
+Only MIT Kerberos runs as a k8s deployment, but all other Apache Ozone services run as one pod on its dedicated node.
+
+SCM number 0 (scm-0) is primordial.
+
+
+Create a user
+---
+
+Access the pod where the krb5-server deployment runs and create a user with the `kadmin.local` command.
+As ode-k8s have already set up `ozone@EXAMPLE.COM` as an administrator user,
+create the UPN with an appropriate password.
+Kerberos REALM is `EXAMPLE.COM`.
+
+```shell
+❯ k exec -it deploy/krb5-server -c krb5-server -- bash
+root@krb5-server-58c48d86b-sh8qv:/# kadmin.local
+Authenticating as principal root/admin@EXAMPLE.COM with password.
+kadmin.local:  addprinc ozone@EXAMPLE.COM
+WARNING: no policy specified for ozone@EXAMPLE.COM; defaulting to no policy
+Enter password for principal "ozone@EXAMPLE.COM":
+Re-enter password for principal "ozone@EXAMPLE.COM":
+Principal "ozone@EXAMPLE.COM" created.
+kadmin.local:  q
+root@krb5-server-58c48d86b-sh8qv:/# exit
+```
+
+
+Run ozone commands
+---
+

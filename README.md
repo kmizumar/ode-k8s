@@ -392,3 +392,49 @@ root@krb5-server-58c48d86b-sh8qv:/# exit
 Run ozone commands
 ---
 
+Please note that each service of ode-k8s only has the information it needs to run itself.
+For example, accessing Datanode to see OM information is impossible in the current configuration,
+and I don't think it should be possible.
+
+If you do not need to check the information of each instance of each service,
+it is recommended to operate via OM since it has a broader range of information.
+(You can also prepare a dedicated client).
+
+```shell
+❯ k exec -it po/om-0 -c om -- bash
+ozone@om-0:/$ kinit ozone@EXAMPLE.COM
+Password for ozone@EXAMPLE.COM:
+ozone@om-0:/$ ozone admin scm roles
+scm-0.scm-0.default.svc.cluster.local:9894:LEADER:b109cac2-3bd5-4ae8-8bf0-6d8c1bb84a70
+scm-2.scm-2.default.svc.cluster.local:9894:FOLLOWER:c0db0f4d-4429-4dfd-9077-d4ce39ed5efc
+scm-1.scm-1.default.svc.cluster.local:9894:FOLLOWER:d40ba86a-c86e-417c-830f-2c9c16259e6b
+ozone@om-0:/$ ozone admin om roles -id=omservice
+om-1 : FOLLOWER (om-1.om-1.default.svc.cluster.local)
+om-2 : FOLLOWER (om-2.om-2.default.svc.cluster.local)
+om-0 : LEADER (om-0.om-0.default.svc.cluster.local)
+ozone@om-0:/$ ozone admin datanode list
+Datanode: 9438d617-48cb-40a9-b2e5-62ceecd75bdf (/default-rack/10.244.7.2/dn-1.dn-1.default.svc.cluster.local/3 pipelines)
+Operational State: IN_SERVICE
+Health State: HEALTHY
+Related pipelines:
+7df09e71-a107-4890-8289-88b7a15c5b2c/RATIS/ONE/RATIS/OPEN/Leader
+c948283b-db42-4899-873a-260e60355565/RATIS/THREE/RATIS/ALLOCATED/Follower
+b99fcbdf-9a71-4b7d-8bd5-2af1271592d0/RATIS/THREE/RATIS/ALLOCATED/Follower
+
+Datanode: f0d720c8-be6f-4251-b55b-cd72acfeaeb5 (/default-rack/10.244.12.2/dn-2.dn-2.default.svc.cluster.local/3 pipelines)
+Operational State: IN_SERVICE
+Health State: HEALTHY
+Related pipelines:
+e705d9e3-8b68-4a42-be12-02cd34d4d343/RATIS/ONE/RATIS/OPEN/Leader
+c948283b-db42-4899-873a-260e60355565/RATIS/THREE/RATIS/ALLOCATED/Follower
+b99fcbdf-9a71-4b7d-8bd5-2af1271592d0/RATIS/THREE/RATIS/ALLOCATED/Follower
+
+Datanode: 13cd967a-649b-4f92-b5df-7f5777cdf86f (/default-rack/10.244.1.2/dn-0.dn-0.default.svc.cluster.local/3 pipelines)
+Operational State: IN_SERVICE
+Health State: HEALTHY
+Related pipelines:
+da793283-bf81-48bd-b4ab-592ab651ee02/RATIS/ONE/RATIS/OPEN/Leader
+c948283b-db42-4899-873a-260e60355565/RATIS/THREE/RATIS/ALLOCATED/Follower
+b99fcbdf-9a71-4b7d-8bd5-2af1271592d0/RATIS/THREE/RATIS/ALLOCATED/Follower
+```
+

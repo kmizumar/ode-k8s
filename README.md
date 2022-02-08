@@ -242,7 +242,7 @@ resources:
   # - datanode/dn-2.yaml
   # - recon/recon.yaml
   # - s3gateway/s3g.yaml
-  - configMapGenerator:
+configMapGenerator:
   # - name: keytabs
   #   files:
   #     - security/HTTP.keytab

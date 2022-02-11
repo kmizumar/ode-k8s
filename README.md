@@ -640,7 +640,7 @@ pod "scm-1" deleted
 pod "scm-2" deleted
 ```
 
-The xclient pod is not included in the `kusbomization.yaml`, so please delete it separately.
+The xclient pod is not included in the `kustomization.yaml`, so please delete it separately.
 
 ```shell
 ❯ k delete -f xclient/

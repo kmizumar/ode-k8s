@@ -291,14 +291,21 @@ krb5-server   1/1     1            1           37s
 ```
 
 Go to the `security/` directory and run the `create-principal.sh` script to generate the SPN.
-The keytab of the generated SPN will be saved in the directory where you ran the script.
+The keytab of the generated SPN will be saved in `/var/lib/krb5kdc/` directory of the krb5-server container.
+
 
 ```shell
 ❯ cd security
 ❯ ./create-principal.sh
 ```
 
+Move the generated keytab files to the `security/` directory so that `kustomize` can use them.
+
+
 ```shell
+❯ sudo mv ../krb5-server/hostpath/lib.krb5kdc/*keytab .
+❯ sudo chown maru:maru *keytab
+❯ chmod 0664 *keytab
 ❯ ls -lF *keytab
 -rw-rw-r-- 1 maru maru  620 Jan 26 15:42 HDDS.keytab
 -rw-rw-r-- 1 maru maru 2280 Jan 26 15:42 HTTP.keytab

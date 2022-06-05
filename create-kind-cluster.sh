@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-KINDEST_NODE_VERSION=v1.23.1
+KINDEST_NODE_VERSION=v1.24.1
 
 function usage {
     printf 'usage: %s [-x|--with-xclient]\n' ${0##*/} >&2

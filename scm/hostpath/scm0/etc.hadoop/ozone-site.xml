@@ -31,7 +31,7 @@
     <value>/data/ozone.scm.ha.ratis.storage</value>
   </property>
   <property>
-    <naem>ozone.scm.ha.ratis.snapshot.dir</naem>
+    <name>ozone.scm.ha.ratis.snapshot.dir</name>
     <value>/data/ozone.scm.ha.ratis.snapshot.dir</value>
   </property>
   <property>

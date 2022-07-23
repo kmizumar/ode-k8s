@@ -1,5 +1,5 @@
 FROM pfnmaru/ozone:1.3.0-SNAPSHOT AS snapshot
-FROM ubuntu:20.04
+FROM ubuntu:22.04
 
 ARG UID=1000
 RUN useradd -u ${UID} -g users ozone

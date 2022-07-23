@@ -1,4 +1,4 @@
-FROM ubuntu:20.04
+FROM ubuntu:22.04
 
 ARG USER=anonymous
 ARG GROUP=anonymous
@@ -10,10 +10,15 @@ ARG DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update && \
     apt-get -yq --no-install-recommends install \
+    software-properties-common \
+    gpg-agent && \
+    add-apt-repository ppa:mozillateam/ppa && \
+    apt-get update && \
+    apt-get -yq --no-install-recommends install \
     krb5-user \
-    firefox \
- && echo 'pref("network.negotiate-auth.trusted-uris", "default.svc.cluster.local");' >> /etc/firefox/syspref.js \
- && echo 'pref("browser.startup.homepage", "file:///etc/firefox/index.html");' >> /etc/firefox/syspref.js \
+    firefox-esr \
+ && echo 'pref("network.negotiate-auth.trusted-uris", "default.svc.cluster.local");' >> /etc/firefox-esr/syspref.js \
+ && echo 'pref("browser.startup.homepage", "file:///etc/firefox/index.html");' >> /etc/firefox-esr/syspref.js \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/* \
  && groupadd -g ${GID} ${GROUP} \

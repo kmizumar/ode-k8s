@@ -2,7 +2,7 @@ ode-k8s
 ===
 
 ode-k8s is intended to be an Ozone Develop Environment on Kubernetes.
-Its purpose is to create a working environment for Apache Ozone on Kubernetes 
+Its purpose is to create a working environment for Apache Ozone on Kubernetes
 (hereafter referred to as k8s, as usual) for development purposes.
 It is intended for development purposes,
 so please DO NOT even think of using it for production.
@@ -25,7 +25,7 @@ ode-k8s is something you don't need to care about.
 You can find samples for k8s under the `kubernetes` directory of the Apache Ozone release
 distributed by  the Apache Software Foundation (hereafter referred to as ASF)
 and find the [Ozone on Kubernetes](https://ci-hadoop.apache.org/view/Hadoop%20Ozone/job/ozone-doc-master/lastSuccessfulBuild/artifact/hadoop-hdds/docs/public/start/kubernetes.html)
-section on the official documentation. 
+section on the official documentation.
 
 
 Requirements
@@ -41,10 +41,10 @@ The following is a list of items required to ode-k8s.
 Not sure about which versions are required, but I'm running ode-k8s with
 
 - Apache Ozone 1.3.0-SNAPSHOT
-- kind v0.11.1 go1.17.5 linux/amd64
-- Docker Engine - Community 20.10.12
-- ansible 5.2.0, ansible-core 2.12.1
-- Ubuntu 20.04.3 LTS
+- kind v0.14.1 go1.18.3 linux/amd64
+- Docker Engine - Community 20.10.17
+- ansible 5.8.0, ansible-core 2.12.6
+- Ubuntu 22.04 LTS
 
 
 How to set up ode-k8s
@@ -154,12 +154,12 @@ you can start an additional worker node for xclient by specifying the `--with-xc
 ❯ ./create-kind-cluster.sh --with-xclient
 Creating cluster "kind" ...
  ✓ Ensuring node image (kindest/node:v1.23.1) 🖼
- ✓ Preparing nodes 📦 📦 📦 📦 📦 📦 📦 📦 📦 📦 📦 📦 📦 📦  
- ✓ Writing configuration 📜 
- ✓ Starting control-plane 🕹️ 
- ✓ Installing CNI 🔌 
- ✓ Installing StorageClass 💾 
- ✓ Joining worker nodes 🚜 
+ ✓ Preparing nodes 📦 📦 📦 📦 📦 📦 📦 📦 📦 📦 📦 📦 📦 📦
+ ✓ Writing configuration 📜
+ ✓ Starting control-plane 🕹️
+ ✓ Installing CNI 🔌
+ ✓ Installing StorageClass 💾
+ ✓ Joining worker nodes 🚜
 Set kubectl context to "kind-kind"
 You can now use your cluster with:
 
@@ -555,7 +555,7 @@ maru@xclient:~$
 Launch firefox
 
 ```shell
-maru@xclient:~$ firefox
+maru@xclient:~$ firefox-esr
 Gtk-Message: 10:16:47.394: Failed to load module "canberra-gtk-module"
 Gtk-Message: 10:16:47.395: Failed to load module "canberra-gtk-module"
 [GFX1-]: glxtest: libpci missing
@@ -586,7 +586,7 @@ maru@xclient:~$
 Launch firefox again.
 
 ```shell
-maru@xclient:~$ firefox
+maru@xclient:~$ firefox-esr
 Gtk-Message: 10:22:14.709: Failed to load module "canberra-gtk-module"
 Gtk-Message: 10:22:14.710: Failed to load module "canberra-gtk-module"
 [GFX1-]: glxtest: libpci missing
@@ -616,7 +616,7 @@ How to stop ode-k8s
 Stopping ode-k8s is the same as erasing the object with normal k8s:
 
 ```shell
-❯ k kustomize | k delete -f -                                                                                                                            ✘ 255 
+❯ k kustomize | k delete -f -                                                                                                                            ✘ 255
 configmap "keytabs" deleted
 configmap "krb5-script" deleted
 configmap "om-script" deleted
@@ -659,6 +659,6 @@ The method to delete a KinD cluster is the same as usual.
 If you changed the cluster name, please specify the target cluster name.
 
 ```shell
-❯ kind delete cluster --name kind                                                                                                                          ✘ 1 
+❯ kind delete cluster --name kind                                                                                                                          ✘ 1
 Deleting cluster "kind" ...
 ```
